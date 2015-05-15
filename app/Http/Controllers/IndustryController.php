@@ -233,11 +233,10 @@ class IndustryController extends Controller
             ORDER BY seit_dev.invTypes.typeName ASC;
         */
         $payload['blueprints'] = \DB::Table('eve_character_blueprints')
-            ->select('invTypes.typeName', 'eve_character_blueprints.*', 'eve_account_apikeyinfo_characters.*', \DB::Raw('COUNT(1) as qty'))
+            ->select('invTypes.typeName', 'invGroups.groupName', 'eve_character_blueprints.*', 'eve_character_sheet.*')
             ->join('invTypes', 'invTypes.typeID', '=', 'eve_character_blueprints.typeID')
-            ->join('eve_account_apikeyinfo_characters', 'eve_account_apikeyinfo_characters.characterID', '=', 'eve_character_blueprints.characterID')
-            //->where('eve_character_blueprints.runs', '=', -1)
-            ->groupBy('eve_character_blueprints.typeID', 'eve_character_blueprints.quantity', 'eve_character_blueprints.runs')
+            ->join('eve_character_sheet', 'eve_character_sheet.characterID', '=', 'eve_character_blueprints.characterID')
+            ->join('invGroups', 'invGroups.groupID', '=', 'invTypes.groupID')
             ->orderBy('invTypes.typeName', 'asc')
             ->get();
 

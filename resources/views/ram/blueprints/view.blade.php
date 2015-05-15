@@ -15,32 +15,43 @@
             <thead>
                 <tr>
                     <th>Blueprint</th>
+                    <th>Category</th>
                     <th>TE</th>
                     <th>ME</th>
-                    <th>Character</th>
-                    <th>Quantity</th>
                     <th>Runs</th>
+                    <th>Type</th>
+                    <th>Character</th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
                     <th>Blueprint</th>
+                    <th>Category</th>
                     <th>TE</th>
                     <th>ME</th>
-                    <th>Character</th>
-                    <th>Quantity</th>
                     <th>Runs</th>
+                    <th>Type</th>
+                    <th>Character</th>
                 </tr>
             </tfoot>
             <tbody>
               @foreach($payload['blueprints'] as $blueprint)
                 <tr>
                     <td>{{ $blueprint->typeName }}</td>
+                    <td>{{ $blueprint->groupName }}</td>
                     <td>{{ $blueprint->timeEfficiency }}</td>
                     <td>{{ $blueprint->materialEfficiency }}</td>
-                    <td>{{ $blueprint->characterName }}</td>
-                    <td>{{ $blueprint->qty }}</td>
+                  @if($blueprint->runs == -1)
+                    <td>Infinite</td>
+                  @else
                     <td>{{ $blueprint->runs }}</td>
+                  @endif
+                  @if($blueprint->quantity == -1)
+                    <td>BPO</td>
+                  @else($blueprint->quantity == -2)
+                    <td>BPC</td>
+                  @endif
+                    <td>{{ $blueprint->name }}</td>
                 </tr>
               @endforeach
             </tbody>
