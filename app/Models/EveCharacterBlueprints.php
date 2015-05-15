@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * Class EveCharacterBlueprint
+ * Class EveCharacterBlueprints
  * @package SeIT\Models
  */
 class EveCharacterBlueprints extends Model

@@ -34,7 +34,6 @@ class Blueprints
 
         // Get the characters for this key
         $characters = EveApi::findKeyCharacters($keyID);
-        
 
         // Check if this key has any characters associated with it
         if (!$characters) {
@@ -68,17 +67,17 @@ class Blueprints
             // checkDbCache will return true if this is the case
             if (!EveApi::checkDbCache($scope, $api, $phealResult->cached_until, $characterID)) {
                 // Flag a Characters BPs as deleted
-                \SeIT\Models\EveCharacterBlueprint::where('characterID', '=', $characterID)->delete();
+                \SeIT\Models\EveCharacterBlueprints::where('characterID', '=', $characterID)->delete();
 
                 foreach ($phealResult->blueprints as $blueprint) {
-                    $blueprint_data = \SeIT\Models\EveCharacterBlueprint::withTrashed()
+                    $blueprint_data = \SeIT\Models\EveCharacterBlueprints::withTrashed()
                         ->where('characterID', '=', $characterID)
                         ->where('itemID', '=', $blueprint->itemID)
                         ->where('typeID', '=', $blueprint->typeID)
                         ->first();
                     
                     if (!$blueprint_data) {
-                        $blueprint_data = new \SeIT\Models\EveCharacterBlueprint;
+                        $blueprint_data = new \SeIT\Models\EveCharacterBlueprints;
                     }
                     
                     $blueprint_data->characterID        = $characterID;
