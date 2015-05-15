@@ -58,11 +58,10 @@ class APIKeyInfo
             $dbRecord->expires = (strlen($phealResult->key->expires) > 0 ? $phealResult->key->expires : null);
             $dbRecord->save();
 
-            $knownCharacters = \SeIT\Models\EveAccountAPIKeyInfoCharacters::where('keyID', '=', $keyID)
+            // pre-seed missingCharacters with the known Characters
+            $missingCharacters = \SeIT\Models\EveAccountAPIKeyInfoCharacters::where('keyID', '=', $keyID)
                 ->select('characterID')
                 ->lists('characterID');
-
-            \Log::debug('Characters', (array)$knownCharacters);
 
             foreach ($phealResult->key->characters as $character) {
                 // Check if we need to update || insert
@@ -82,12 +81,16 @@ class APIKeyInfo
                 $character_data->corporationName = $character->corporationName;
                 $character_data->save();
                 
-                // Remove this characterID from the known_characters as its still on
-                // the key
-                if (array_key_exists($character->characterID, $knownCharacters)) {
-                    unset($knownCharacters[$character->characterID]);
+                // Remove this characterID from the missingCharacters as its still on the key
+                if (array_key_exists($character->characterID, $missingCharacters)) {
+                    unset($missingCharacters[$character->characterID]);
                 }
             }
+
+            \DB::Table('eve_account_apikeyinfo_characters')
+                ->whereIn('characterID', $missingCharacters)
+                ->where('keyID', '=', $keyID)
+                ->delete();
 
             EveApi::setDbCache($scope, $api, $phealResult->cached_until, $keyID);
             return true;
