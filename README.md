@@ -7,4 +7,4 @@
 * Supervisor
 * Git and Shell access
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/6ac73257-c949-4561-bc16-594f9a891410/big.png)](https://insight.sensiolabs.com/projects/6ac73257-c949-4561-bc16-594f9a891410)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/0e707629-c858-4b6e-9fe0-f9e6dca1ad49/big.png)](https://insight.sensiolabs.com/projects/0e707629-c858-4b6e-9fe0-f9e6dca1ad49)
