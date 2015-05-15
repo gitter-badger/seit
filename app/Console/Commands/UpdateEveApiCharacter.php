@@ -39,7 +39,11 @@ class UpdateEveApiCharacter extends Command
     {
         \Log::info('Dispatching command ' . $this->name, array('src' => __CLASS__));
 
-        $apiKeyList = \DB::Table('seit_keys')->where('isOk', true)->get();
+        $apiKeyList = \DB::Table('seit_keys')
+            ->join('eve_account_apikeyinfo', 'eve_account_apikeyinfo.keyID', '=', 'seit_keys.keyID')
+            ->where('eve_account_apikeyinfo.type', '!=', 'Corporation')
+            ->where('isOk', true)
+            ->get();
 
         foreach ($apiKeyList as $apiKey) {
             \Log::info('Key Details: ', (array)$apiKey->keyID);
