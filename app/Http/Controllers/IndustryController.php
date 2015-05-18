@@ -176,42 +176,72 @@ class IndustryController extends Controller
             10 => 256000
         );
 
-        // see https://github.com/aineko-m/iveeCore/blob/850fb60b125599efde5bb76cf3b25e0465f6d7d3/iveeCore/IndustryModifier.php#L192
-        //$te_modifier = ;
-        //$me_modifier = ;
 
         $system_indices = \DB::Table('crest_industry_systems')
             ->where('solarSystemID', '=', \Input::get('system', 0))
-            ->get();
+            ->first();
         
-        $times = \DB::Table('industryActivity')
+        $baseTimeTE = \DB::Table('industryActivity')
             ->where('typeID', '=', \Input::get('type', 0))
-            ->whereIn('activityID', array(3,4))
-            ->get();
+            ->where('activityID', 3)
+            ->pluck('time');
         
-        if (\Input::has('me')) {
-            list($ME_start, $ME_end) = explode(",", \Input::get('me'));
-        } else {
-            $ME_start = 0;
-            $ME_end = 10;
-        }
-        
+        $baseTimeME = \DB::Table('industryActivity')
+            ->where('typeID', '=', \Input::get('type', 0))
+            ->where('activityID', 4)
+            ->pluck('time');
+
+        // see https://github.com/aineko-m/iveeCore/blob/850fb60b125599efde5bb76cf3b25e0465f6d7d3/iveeCore/IndustryModifier.php#L192
         if (\Input::has('te')) {
-            list($TE_start, $TE_end) = explode(",", \Input::get('te'));
+            list($TEStart, $TEEnd) = explode(",", \Input::get('te'));
         } else {
-            $TE_start = 0;
-            $TE_end = 20;
+            $TEStart = 0;
+            $TEEnd = 20;
         }
 
+        if (\Input::has('me')) {
+            list($MEStart, $MEEnd) = explode(",", \Input::get('me'));
+        } else {
+            $MEStart = 0;
+            $MEEnd = 10;
+        }
+
+        // ToDO: Helper for baseJobCost
+        $baseJobCost=0;
+
+        //TE: Research and Advanced Industry skill
+        $modifierTE = (1.0 - 0.05 * \SeIT\Services\DB::getSkillLevel(\Input::get('character', 0), 3403))
+            * (1.0 - 0.03 * \SeIT\Services\DB::getSkillLevel(\Input::get('character', 0), 3388));
+
+        //ME: Metallurgy and Advanced Industry skill
+        $modifierME = (1.0 - 0.05 * \SeIT\Services\DB::getSkillLevel(\Input::get('character', 0), 3409))
+            * (1.0 - 0.03 * \SeIT\Services\DB::getSkillLevel(\Input::get('character', 0), 3388));
+
+        $TimeTE = $baseTimeTE * $modifierTE * $level_modifier[$TEEnd/2]/105;        
+        $TimeME = $baseTimeME * $modifierME * $level_modifier[$MEEnd]/105;
+        
+        $jobFeeME = $baseJobCost * $system_indices->meResearchIndex * $level_modifier[$MEEnd]/105;
+        $jobFeeTE = $baseJobCost * $system_indices->teResearchIndex * $level_modifier[$TEEnd/2]/105;
+        
+        if ($TEStart > 0) {
+            $TimeTE = $TimeTE - ($baseTimeTE * $modifierTE * $level_modifier[$TEStart/2]/105);
+            $jobFeeTE = $jobFeeTE - ($baseJobCost * $system_indices->teResearchIndex * $level_modifier[$TEEnd/2]/105);
+        }
+
+        if ($MEStart > 0) {
+            $TimeME = $TimeME - ($baseTimeME * $modifierME * $level_modifier[$MEStart]/105);
+            $jobFeeME = $jobFeeME - ($baseJobCost * $system_indices->meResearchIndex * $level_modifier[$MEStart]/105);
+        }
+        
         $payload['input'] = \Input::all();
         $payload['level_modifier'] = $level_modifier;
         $payload['system_indices'] = $system_indices;
-        $payload['times'] = $times;
-        $payload['ME_start'] = $ME_start;
-        $payload['TE_start'] = $ME_end;
-        $payload['ME_end'] = $TE_start;
-        $payload['TE_end'] = $TE_end;
-
+        $payload['TimeME'] = $TimeME;
+        $payload['TimeTE'] = $TimeTE;
+        $payload['MEStart'] = $MEStart;
+        $payload['TEStart'] = $TEStart;
+        $payload['MEEnd'] = $MEEnd;
+        $payload['TEEnd'] = $TEEnd;
 
         return \View::make('debug')
             ->with('payload', $payload);
@@ -224,14 +254,6 @@ class IndustryController extends Controller
      */
     public function getBlueprints()
     {
-        /*
-            SELECT seit_dev.invTypes.typeName, seit_dev.eve_character_blueprints.*#, COUNT(1)
-            FROM seit_dev.eve_character_blueprints
-            JOIN seit_dev.invTypes ON seit_dev.invTypes.typeID = seit_dev.eve_character_blueprints.typeID
-            WHERE seit_dev.eve_character_blueprints.runs = -1
-            GROUP BY seit_dev.eve_character_blueprints.typeID, seit_dev.eve_character_blueprints.quantity, seit_dev.eve_character_blueprints.runs
-            ORDER BY seit_dev.invTypes.typeName ASC;
-        */
         $payload['blueprints'] = \DB::Table('eve_character_blueprints')
             ->select('invTypes.typeName', 'invGroups.groupName', 'eve_character_blueprints.*', 'eve_character_sheet.*')
             ->join('invTypes', 'invTypes.typeID', '=', 'eve_character_blueprints.typeID')
