@@ -206,10 +206,10 @@ class DB
      */
     public static function getSkillLevel($characterID, $skillTypeID)
     {
-        return \DB::Table('eve_character_charactersheet')
+        return \DB::Table('eve_character_sheet_skills')
             ->select('level')
-            ->where('chacracterID', '=', $characterID)
-            ->where('skill', '=', $skillTypeID)
+            ->where('characterID', '=', $characterID)
+            ->where('typeID', '=', $skillTypeID)
             ->pluck('level');
     }
 
@@ -220,8 +220,7 @@ class DB
         foreach ($parentNodes as $parentNode) {
             if ($parentNode->hasTypes==0) {
                 $parentNode->children = static::iterateMarketGroupData($parentNode->id);
-            }
-            else if ($parentNode->hasTypes==1) {
+            } elseif ($parentNode->hasTypes==1) {
                 // ToDo :( ?
             }
         }
