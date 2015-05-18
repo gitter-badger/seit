@@ -220,8 +220,6 @@ class DB
         foreach ($parentNodes as $parentNode) {
             if ($parentNode->hasTypes==0) {
                 $parentNode->children = static::iterateMarketGroupData($parentNode->id);
-            } elseif ($parentNode->hasTypes==1) {
-                // ToDo :( ?
             }
         }
 
