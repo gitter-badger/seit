@@ -45,6 +45,13 @@ class UpdateSDEData extends Command
      * @var mixed
      */
     protected $sdeMeta;
+
+    /**
+     * Holds the Storage path
+     *
+     * @var string
+     */
+    protected $storage;
     
 
     /**
@@ -53,7 +60,18 @@ class UpdateSDEData extends Command
     public function __construct()
     {
         parent::__construct();
+
         $this->client = new GuzzleClient();
+
+        $r = $this->client->createRequest('GET', 'https://raw.githubusercontent.com/LunarchildEU/seit/resource/sde.json');
+        $r->setHeader('User-Agent', $this->userAgent);
+
+        $this->sdeMeta = json_decode($this->client->send($r)->getBody());
+        $this->storage = storage_path() . '/sde/' . $this->sdeMeta->version . '/';
+
+        if (!\File::exists($this->storage)) {
+            \File::makeDirectory($this->storage, 0755, true);
+        }
     }
 
     /**
@@ -82,12 +100,10 @@ class UpdateSDEData extends Command
 
     protected function download()
     {
-        $this->fetchSDEMetadata();
-
         if ($this->confirm('Reaquire missing SDE Data for update / refresh ? [YES/no]', true)) {
             foreach ($this->sdeMeta->tables as $table) {
                 $url = $this->sdeMeta->url . $table . $this->sdeMeta->format;
-                $file = $storage . $table . $this->sdeMeta->format;
+                $file = $this->storage . $table . $this->sdeMeta->format;
                 
                 // Check if we do not have the file and download as needed
                 if (!\File::exists($file)) {
@@ -116,12 +132,10 @@ class UpdateSDEData extends Command
 
     protected function update()
     {
-        $this->fetchSDEMetadata();
-
         if ($this->confirm('Unpack all downloaded files and import to "' . \Config::get('database.connections.seit.database') .'"? [YES/no]', true)) {
             foreach ($this->sdeMeta->tables as $table) {
-                $file = $storage . $table . $this->sdeMeta->format;
-                $file_sql = $storage . $table . '.sql';
+                $file = $this->storage . $table . $this->sdeMeta->format;
+                $file_sql = $this->storage . $table . '.sql';
                 
                 if (!\File::exists($file)) {
                     $this->warn($file . ' is missing.');
@@ -170,8 +184,6 @@ class UpdateSDEData extends Command
 
     protected function status()
     {
-        $this->fetchSDEMetadata();
-
         $sde_installed = \SeIT\Models\SeITMetadata::where('key', '=', 'sde_version')->first();
 
         if (!$sde_installed) {
@@ -183,16 +195,15 @@ class UpdateSDEData extends Command
 
         $this->info('Installed SDE: ' . $sde_installed->value);
         $this->info('Available SDE: ' . $this->sdeMeta->version);
-        $this->info('SDE Storage:   ' . $this->getStoragePath());
+        $this->info('SDE Storage:   ' . $this->storage);
     }
 
     protected function verify()
     {
-        $this->fetchSDEMetadata();
         $sde_installed = \SeIT\Models\SeITMetadata::where('key', '=', 'sde_version')->first();
         $this->info('Installed SDE: ' . $sde_installed->value);
         $this->info('Available SDE: ' . $this->sdeMeta->version);
-        $this->info('SDE Storage:   ' . $this->getStoragePath());
+        $this->info('SDE Storage:   ' . $this->storage);
 
         $i;
 
@@ -209,26 +220,6 @@ class UpdateSDEData extends Command
         }
 
         return true;
-    }
-
-    protected function fetchSDEMetadata()
-    {
-        if ($this->sdeMeta === null) {
-            $r = $this->client->createRequest('GET', 'https://raw.githubusercontent.com/LunarchildEU/seit/resource/sde.json');
-            $r->setHeader('User-Agent', $this->userAgent);
-            $this->sdeMeta = json_decode($this->client->send($r)->getBody());
-        }
-    }
-
-    protected function getStoragePath()
-    {
-        $storage = storage_path() . '/sde/' . $this->sdeMeta->version . '/';
-
-        if (!\File::exists($storage)) {
-            \File::makeDirectory($storage, 0755, true);
-        }
-
-        return $storage;
     }
 
     /**
