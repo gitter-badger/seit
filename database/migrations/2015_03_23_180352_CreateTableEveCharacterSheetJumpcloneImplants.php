@@ -13,7 +13,7 @@ class CreateTableEveCharacterSheetJumpcloneImplants extends Migration
      */
     public function up()
     {
-        Schema::create('eve_character_sheet_jumpclone_implants', function(Blueprint $table) {
+        Schema::create('eve_character_sheet_jumpclone_implants', function (Blueprint $table) {
             $table->increments('id');
           // Id for the many to one relationship from class
           // EveEveCharacterCharacterSheetJumpClones

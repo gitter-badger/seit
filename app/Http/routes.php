@@ -17,7 +17,7 @@ Route::controllers([
     'sso' => 'Auth\SSOController',
 ]);
 
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => 'auth'], function () {
     Route::get('/', 'DashboardController@getIndex');
     Route::controllers([
         'dashboard' => 'DashboardController',

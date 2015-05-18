@@ -13,7 +13,7 @@ class CreateSeITCrestLinkTable extends Migration
      */
     public function up()
     {
-        Schema::create('seit_crestlink', function(Blueprint $table) {
+        Schema::create('seit_crestlink', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('userID')->unsigned();
             $table->integer('characterID')->unsigned();

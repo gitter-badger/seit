@@ -13,7 +13,7 @@ class CreateTableEveNotificationtypes extends Migration
      */
     public function up()
     {
-        Schema::create('eve_notification_types', function(Blueprint $table) {
+        Schema::create('eve_notification_types', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('typeID')->unique()->unsigned();
             $table->string('description');

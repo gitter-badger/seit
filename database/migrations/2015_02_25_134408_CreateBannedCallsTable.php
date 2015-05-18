@@ -13,7 +13,7 @@ class CreateBannedCallsTable extends Migration
      */
     public function up()
     {
-        Schema::create('banned_calls', function(Blueprint $table) {
+        Schema::create('banned_calls', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('ownerID')->unsigned();
             $table->string('api');

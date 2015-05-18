@@ -13,7 +13,7 @@ class CreateTableEveApiCalllist extends Migration
      */
     public function up()
     {
-        Schema::create('eve_api_calllist', function(Blueprint $table) {
+        Schema::create('eve_api_calllist', function (Blueprint $table) {
             $table->increments('id');
             $table->string('type');
             $table->string('name');

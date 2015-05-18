@@ -13,7 +13,7 @@ class CreateTableEveConquerablestationlist extends Migration
      */
     public function up()
     {
-        Schema::create('eve_conquerablestationlist', function(Blueprint $table) {
+        Schema::create('eve_conquerablestationlist', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('stationID')->unique()->unsigned();
             $table->string('stationName');

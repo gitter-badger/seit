@@ -62,7 +62,7 @@ class UpdateSDEData extends Command
      * @return void
      */
     public function fire()
-    {        
+    {
         if ($this->option('status') === true) {
             $this->status();
         }
@@ -90,7 +90,7 @@ class UpdateSDEData extends Command
                 $file = $storage . $table . $this->sdeMeta->format;
                 
                 // Check if we do not have the file and download as needed
-                if(!\File::exists($file)) {
+                if (!\File::exists($file)) {
                     $this->info('[info] Fetching ' . $table . ' from ' . $url);
                     $request = $client->createRequest('GET', $url);
                     $request->setHeader('User-Agent', $userAgent);
@@ -101,7 +101,7 @@ class UpdateSDEData extends Command
                     $request = $client->createRequest('HEAD', $url);
                     $request->setHeader('User-Agent', $userAgent);
                     $response = $client->send($request);
-                    if(!\File::size($file) == $response->getHeader('content-length')) {
+                    if (!\File::size($file) == $response->getHeader('content-length')) {
                         $this->info('[info] Reaquiring ' . $table . ' from ' . $url);
                         $request = $client->createRequest('GET', $url);
                         $request->setHeader('User-Agent', $userAgent);
@@ -157,12 +157,12 @@ class UpdateSDEData extends Command
                 \File::delete($file_sql);
             }
             
-            $sde_installed = \SeIT\Models\SeITMetadata::where('key','=', 'sde_version')->first();
+            $sde_installed = \SeIT\Models\SeITMetadata::where('key', '=', 'sde_version')->first();
             
             if (!$sde_installed) {
                 $sde_installed = new \SeIT\Models\SeITMetadata();
                 $sde_installed->key = 'sde_version';
-            }            
+            }
             $sde_installed->value = $this->sdeMeta->version;
             $sde_installed->save();
         }
@@ -172,7 +172,7 @@ class UpdateSDEData extends Command
     {
         $this->fetchSDEMetadata();
 
-        $sde_installed = \SeIT\Models\SeITMetadata::where('key','=', 'sde_version')->first();
+        $sde_installed = \SeIT\Models\SeITMetadata::where('key', '=', 'sde_version')->first();
 
         if (!$sde_installed) {
             $sde_installed = new \SeIT\Models\SeITMetadata();
@@ -189,7 +189,7 @@ class UpdateSDEData extends Command
     protected function verify()
     {
         $this->fetchSDEMetadata();
-        $sde_installed = \SeIT\Models\SeITMetadata::where('key','=', 'sde_version')->first();
+        $sde_installed = \SeIT\Models\SeITMetadata::where('key', '=', 'sde_version')->first();
         $this->info('Installed SDE: ' . $sde_installed->value);
         $this->info('Available SDE: ' . $this->sdeMeta->version);
         $this->info('SDE Storage:   ' . $this->getStoragePath());
@@ -206,14 +206,14 @@ class UpdateSDEData extends Command
 
         if (!count($sdeMeta->tables) == $i) {
             return false;
-        } 
+        }
 
         return true;
     }
 
     protected function fetchSDEMetadata()
     {
-        if($this->sdeMeta === null) {
+        if ($this->sdeMeta === null) {
             $r = $this->client->createRequest('GET', 'https://raw.githubusercontent.com/LunarchildEU/seit/resource/sde.json');
             $r->setHeader('User-Agent', $this->userAgent);
             $this->sdeMeta = json_decode($this->client->send($r)->getBody());
@@ -224,7 +224,7 @@ class UpdateSDEData extends Command
     {
         $storage = storage_path() . '/sde/' . $this->sdeMeta->version . '/';
 
-        if(!\File::exists($storage)) {
+        if (!\File::exists($storage)) {
             \File::makeDirectory($storage, 0755, true);
         }
 

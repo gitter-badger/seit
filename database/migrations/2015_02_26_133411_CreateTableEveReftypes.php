@@ -13,7 +13,7 @@ class CreateTableEveReftypes extends Migration
      */
     public function up()
     {
-        Schema::create('eve_reftypes', function(Blueprint $table) {
+        Schema::create('eve_reftypes', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('refTypeID')->unique()->unsigned();
             $table->text('refTypeName');

@@ -13,7 +13,7 @@ class CreateTableEveAlliancelist extends Migration
      */
     public function up()
     {
-        Schema::create('eve_alliancelist_membercorporations', function(Blueprint $table) {
+        Schema::create('eve_alliancelist_membercorporations', function (Blueprint $table) {
             $table->increments('id');
           // Id for the many to one relationship from class
           // EveEveAllianceList

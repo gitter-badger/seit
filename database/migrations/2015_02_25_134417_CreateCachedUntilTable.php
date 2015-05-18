@@ -13,7 +13,7 @@ class CreateCachedUntilTable extends Migration
      */
     public function up()
     {
-        Schema::create('cached_until', function(Blueprint $table) {
+        Schema::create('cached_until', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('ownerID')->unsigned();
             $table->string('api');

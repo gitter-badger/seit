@@ -13,7 +13,7 @@ class CreateTableEveCharacterinfo extends Migration
      */
     public function up()
     {
-        Schema::create('eve_characterinfo', function(Blueprint $table) {
+        Schema::create('eve_characterinfo', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('characterID')->unique()->unsigned();
             $table->string('characterName');

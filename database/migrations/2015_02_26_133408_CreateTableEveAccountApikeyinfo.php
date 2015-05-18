@@ -13,7 +13,7 @@ class CreateTableEveAccountApikeyinfo extends Migration
      */
     public function up()
     {
-        Schema::create('eve_account_apikeyinfo', function(Blueprint $table) {
+        Schema::create('eve_account_apikeyinfo', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('keyID')->unsigned();
             $table->integer('accessMask')->unsigned();

@@ -13,7 +13,7 @@ class CreateTableEveErrorlist extends Migration
      */
     public function up()
     {
-        Schema::create('eve_errorlist', function(Blueprint $table) {
+        Schema::create('eve_errorlist', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('errorCode')->unique()->unsigned();
             $table->text('errorText');

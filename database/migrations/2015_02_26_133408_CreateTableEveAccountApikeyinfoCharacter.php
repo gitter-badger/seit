@@ -13,7 +13,7 @@ class CreateTableEveAccountApikeyinfoCharacter extends Migration
      */
     public function up()
     {
-        Schema::create('eve_account_apikeyinfo_characters', function(Blueprint $table) {
+        Schema::create('eve_account_apikeyinfo_characters', function (Blueprint $table) {
             $table->increments('id');
           // Id for the many to one relationship from class
           // EveAccountAPIKeyInfo

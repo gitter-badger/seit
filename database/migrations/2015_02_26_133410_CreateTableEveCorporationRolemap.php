@@ -13,7 +13,7 @@ class CreateTableEveCorporationRolemap extends Migration
      */
     public function up()
     {
-        Schema::create('eve_corporation_rolemap', function(Blueprint $table) {
+        Schema::create('eve_corporation_rolemap', function (Blueprint $table) {
             $table->increments('id');
           
             $table->bigInteger('roleID')->unsigned();
