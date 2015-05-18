@@ -37,10 +37,8 @@ class UpdateCrestAll extends Command
      */
     public function fire()
     {
-        $this->info('Dispatching command ' . $this->name, array('src' => __CLASS__));
         \SeIT\Services\Queue::addCrestJob('\SeIT\Queues\Crest\IndustryFacilitiesUpdater');
         \SeIT\Services\Queue::addCrestJob('\SeIT\Queues\Crest\IndustrySystemsUpdater');
         \SeIT\Services\Queue::addCrestJob('\SeIT\Queues\Crest\MarketPricesUpdater');
-        $this->info('Dispatched command ' . $this->name, array('src' => __CLASS__));
     }
 }
