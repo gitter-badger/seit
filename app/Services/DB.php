@@ -127,6 +127,26 @@ class DB
     }
 
     /**
+     * Get an array of Prices mapped to corresponding typeIDs
+     * @param $materials array Material list
+     * @return array TypeID to Price map
+     */
+    public static function getMaterialPrices(array $materials)
+    {
+        $priceMap = null;
+        $query = \DB::Table('crest_marketprices')
+            ->select('typeID', 'adjustedPrice')
+            ->whereIn('typeID', $materials)
+            ->get();
+
+        foreach ($query as $e) {
+            $priceMap[$e->typeID] = $e->adjustedPrice;
+        }
+
+        return $priceMap;
+    }
+
+    /**
      * Get attributes for a given BPC and activity
      *
      * @param $typeID int TypeID of BPC

@@ -50,4 +50,23 @@ class Helper
 
         return $entityName;
     }
+
+    public static function baseJobCost($typeID)
+    {
+        $totals = 0;
+        // Retrieve a Material list
+        $materials = DB::getBPCMaterials($typeID, 1);
+        // Get Prices for Materials (by the Array keys)
+        $prices = DB::getMaterialPrices(array_keys($materials));
+
+        if (count($materials) != count($prices)) {
+            return false;
+        }
+
+        foreach ($materials as $material => $count) {
+            $totals = $totals + ($count * $prices[$material]);
+        }
+
+        return $totals;
+    }
 }

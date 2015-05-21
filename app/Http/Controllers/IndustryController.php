@@ -176,7 +176,6 @@ class IndustryController extends Controller
             10 => 256000
         );
 
-
         $system_indices = \DB::Table('crest_industry_systems')
             ->where('solarSystemID', '=', \Input::get('system', 0))
             ->first();
@@ -206,8 +205,7 @@ class IndustryController extends Controller
             $MEEnd = 10;
         }
 
-        // ToDO: Helper for baseJobCost
-        $baseJobCost=0;
+        $baseJobCost = \SeIT\Services\Helper::baseJobCost(\Input::get('type', 0));
 
         //TE: Research and Advanced Industry skill
         $modifierTE = (1.0 - 0.05 * \SeIT\Services\DB::getSkillLevel(\Input::get('character', 0), 3403))
@@ -217,11 +215,11 @@ class IndustryController extends Controller
         $modifierME = (1.0 - 0.05 * \SeIT\Services\DB::getSkillLevel(\Input::get('character', 0), 3409))
             * (1.0 - 0.03 * \SeIT\Services\DB::getSkillLevel(\Input::get('character', 0), 3388));
 
-        $TimeTE = $baseTimeTE * $modifierTE * $level_modifier[$TEEnd/2]/105;        
+        $TimeTE = $baseTimeTE * $modifierTE * $level_modifier[$TEEnd/2]/105;
         $TimeME = $baseTimeME * $modifierME * $level_modifier[$MEEnd]/105;
         
-        $jobFeeME = $baseJobCost * $system_indices->meResearchIndex * $level_modifier[$MEEnd]/105;
-        $jobFeeTE = $baseJobCost * $system_indices->teResearchIndex * $level_modifier[$TEEnd/2]/105;
+        $jobFeeME = $baseJobCost * $system_indices->meResearchIndex * 0.02 * $level_modifier[$MEEnd]/105;
+        $jobFeeTE = $baseJobCost * $system_indices->teResearchIndex * 0.02 * $level_modifier[$TEEnd/2]/105;
         
         if ($TEStart > 0) {
             $TimeTE = $TimeTE - ($baseTimeTE * $modifierTE * $level_modifier[$TEStart/2]/105);
@@ -234,7 +232,6 @@ class IndustryController extends Controller
         }
         
         $payload['input'] = \Input::all();
-        $payload['level_modifier'] = $level_modifier;
         $payload['system_indices'] = $system_indices;
         $payload['TimeME'] = $TimeME;
         $payload['TimeTE'] = $TimeTE;
@@ -242,6 +239,9 @@ class IndustryController extends Controller
         $payload['TEStart'] = $TEStart;
         $payload['MEEnd'] = $MEEnd;
         $payload['TEEnd'] = $TEEnd;
+        $payload['jobFeeME'] = $jobFeeME;
+        $payload['jobFeeTE'] = $jobFeeTE;
+        $payload['baseJobCost'] = $baseJobCost;
 
         return \View::make('debug')
             ->with('payload', $payload);
