@@ -51,22 +51,34 @@ class Helper
         return $entityName;
     }
 
-    public static function baseJobCost($typeID)
+    public static function formatTimeInterval(\DateInterval $di)
     {
-        $totals = 0;
-        // Retrieve a Material list
-        $materials = DB::getBPCMaterials($typeID, 1);
-        // Get Prices for Materials (by the Array keys)
-        $prices = DB::getMaterialPrices(array_keys($materials));
+        $doPlural = function ($nb, $str) {
+            return $nb > 1 ? $str . 's' : $str;
+        };
 
-        if (count($materials) != count($prices)) {
-            return false;
+        $format = array();
+
+        if ($di->y !== 0) {
+            $format[] = "%y ".$doPlural($di->y, "year");
         }
-
-        foreach ($materials as $material => $count) {
-            $totals = $totals + ($count * $prices[$material]);
+        if ($di->m !== 0) {
+            $format[] = "%m ".$doPlural($di->m, "month");
         }
+        if ($di->d !== 0) {
+            $format[] = "%d ".$doPlural($di->d, "day");
+        }
+        if ($di->h !== 0) {
+            $format[] = "%h ".$doPlural($di->h, "hour");
+        }
+        if ($di->i !== 0) {
+            $format[] = "%i ".$doPlural($di->i, "minute");
+        }
+        if ($di->s !== 0) {
+            $format[] = "%s ".$doPlural($di->s, "second");
+        }
+        $format = trim(implode(" ", $format));
 
-        return $totals;
+        return $di->format($format);
     }
 }

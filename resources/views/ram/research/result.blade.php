@@ -1,10 +1,11 @@
 @extends('layouts.masterLayout')
 
-@section('html_title', 'Manufacture')
+@section('html_title', 'Research ME / TE')
 
 @section('page_content')
 
 {!! \Form::open() !!}
+
 <div class="row">
   <div class="col-md-6">
     <div class="box box-primary box-solid">
@@ -34,7 +35,7 @@
             <label for="me">ME</label>
           </div>
           <div class="col-md-10"> 
-            {!! \Form::text('me', $payload['input']['me'], array('autocomplete' => 'off', 'id'=>'me-slider', 'class'=>'form-control')) !!}
+            <div class="margin">{!! \Form::text('me', $payload['input']['me'], array('autocomplete' => 'off', 'id'=>'me-slider', 'class'=>'slider form-control', 'data-slider-min'=>'0', 'data-slider-max'=>'10', 'data-slider-step'=>'1', 'data-slider-value'=>'[0,10]', 'data-slider-id'=>'green')) !!}</div>
           </div>
         </div>
         <div class="form-group row">
@@ -42,30 +43,22 @@
             <label for="te">TE</label>
           </div>
           <div class="col-md-10"> 
-            {!! \Form::text('te', $payload['input']['te'], array('autocomplete' => 'off', 'id'=>'te-slider', 'class'=>'form-control')) !!}
+            <div class="margin">{!! \Form::text('te', $payload['input']['te'], array('autocomplete' => 'off', 'id'=>'te-slider', 'class'=>'slider form-control', 'data-slider-min'=>'0', 'data-slider-max'=>'20', 'data-slider-step'=>'2', 'data-slider-value'=>'[0,20]', 'data-slider-id'=>'green')) !!}</div>
           </div>
         </div>
         <div class="form-group row">
           <div class="col-md-2">
-            <label for="te">Quantity</label>
+            <label for="laboratory">Laboratory</label>
           </div>
           <div class="col-md-10"> 
-            {!! \Form::text('qty', $payload['input']['qty'] ,array('autocomplete' => 'off', 'id'=>'qty', 'class'=>'form-control', 'value'=>'0')) !!}
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-md-2">
-            <label for="assembly">Assembly</label>
-          </div>
-          <div class="col-md-10"> 
-            {!! \Form::select('assembly', array('0'=>'Station', '1' => 'Assembly Array', '2' => 'Thukker Assembly Array', '3' => 'Rapid Assembly Array'), 'Station', array('autocomplete' => 'off', 'id'=>'assembly', 'class'=>'form-control', 'value'=>'0')) !!}
+            {!! \Form::select('laboratory', array('0'=>'Station', '1' => 'Research Laboratory (ME/TE)', '2' => 'Hyasoda Research Laboratory (ME/TE)'), $payload['input']['laboratory'], array('autocomplete' => 'off', 'id'=>'laboratory', 'class'=>'form-control')) !!}
           </div>
         </div>
         <div class="form-group row">
           <div class="col-md-2">
             <label for="skills">Character</label>
           </div>
-          <div class="col-md-10">
+          <div class="col-md-10"> 
             {!! \Form::select('character', $payload['characters'], $payload['input']['character'], array('autocomplete' => 'off', 'id'=>'character', 'class'=>'form-control')) !!}
           </div>
         </div>
@@ -76,58 +69,36 @@
     </div>
   </div>
   <div class="col-md-6">
-    <div class="row">
-      <div class="col-md-22">
-        <div class="box box-primary box-solid">
-          <div class="box-header ">
-            <h3 class="box-title">Bill of Materials for {{ $payload['qty'] }} {{ \SeIT\Services\DB::getTypeNameById($payload['baseTypeID']) }}</h3>
-            <div class="box-tools">&nbsp;</div>
-          </div>
-          <div class="box-body">
-            <table class="table">
-              <thead>
-                  <th>Material</th>
-                  <th>Quantity</th>
-              </thead>
-              <tbody>
-              @foreach($payload['materials_required'] as $material => $quantity)
-              <tr>
-                <td>{{ \SeIT\Services\DB::getTypeNameById($material) }}</td>
-                <td>{{ $quantity }}</td>
-              </tr>
-              @endforeach
-              </tbody>
-            </table>
-          </div>
-        </div>
+    <div class="box box-primary box-solid">
+      <div class="box-header ">
+        <h3 class="box-title">Result</h3>
+        <div class="box-tools">&nbsp;</div>
       </div>
-      <div class="col-md-22">
-        <div class="box box-primary box-solid">
-          <div class="box-header ">
-            <h3 class="box-title">Build Time for {{ $payload['qty'] }} {{ \SeIT\Services\DB::getTypeNameById($payload['baseTypeID']) }}</h3>
-            <div class="box-tools">&nbsp;</div>
-          </div>
-          <div class="box-body">
-            @if($payload['time']->y > 0) 
-              {!! $payload['time']->y !!} Year(s)
-            @endif
-            @if($payload['time']->m > 0) 
-              {!! $payload['time']->m !!} Month(s)
-            @endif
-            @if($payload['time']->d > 0) 
-              {!! $payload['time']->d !!} Day(s)
-            @endif
-            @if($payload['time']->h > 0) 
-              {!! $payload['time']->h !!} Hour(s)
-            @endif
-            @if($payload['time']->i > 0) 
-              {!! $payload['time']->i !!} Minute(s)
-            @endif
-            @if($payload['time']->s > 0) 
-              {!! $payload['time']->s !!} Second(s)
-            @endif
-          </div>
-        </div>
+      <div class="box-body">
+        <h4>ME Research</h4>
+        <table class="table condensed">
+          <tr>
+            <td width="25%">Cost</td>
+            <td >{{ number_format($payload['jobFeeME'], 2, ",", ".") }} ISK</td>
+          </tr>
+          <tr>
+            <td width="25%">Time</td>
+            <td>{{ \SeIT\Services\Helper::formatTimeInterval($payload['jobTimeME']) }}</td>
+          </tr>
+        </table>
+        <h4>TE Research</h4>
+        <table class="table condensed">
+          <tr>
+            <td width="25%">Cost</td>
+            <td>{{ number_format($payload['jobFeeTE'], 2, ",", ".") }} ISK</td>
+          </tr>
+          <tr>
+            <td width="25%">Time</td>
+            <td>{{ \SeIT\Services\Helper::formatTimeInterval($payload['jobTimeTE']) }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="box-footer">
       </div>
     </div>
   </div>
@@ -140,31 +111,16 @@
 @section('javascript')
 <script type="text/javascript">
 
-$('#me-slider').TouchSpin({
-  min: 0,
-  max: 10,
-  step: 1,
-  initval: 0,
-  verticalbuttons: true,
-  verticalupclass: 'glyphicon glyphicon-plus',
-  verticaldownclass: 'glyphicon glyphicon-minus'
+$('#me-slider').slider({
+  formatter: function(value) {
+    return 'Current value: ' + value;
+  }
 });
 
-$('#te-slider').TouchSpin({
-  min: 0,
-  max: 20,
-  step: 2,
-  initval: 0,
-  verticalbuttons: true,
-  verticalupclass: 'glyphicon glyphicon-plus',
-  verticaldownclass: 'glyphicon glyphicon-minus'
-});
-
-$("#qty").TouchSpin({
-  initval: 0,
-  verticalbuttons: true,
-  verticalupclass: 'glyphicon glyphicon-plus',
-  verticaldownclass: 'glyphicon glyphicon-minus'
+$('#te-slider').slider({
+  formatter: function(value) {
+    return 'Current value: ' + value;
+  }
 });
 
 // List of Items
@@ -219,8 +175,8 @@ $('#system').select2({
   }
 });
 
-// List of Assemblys
-$('#assembly').select2();
+// List of laboratorys
+$('#laboratory').select2();
 // List of Characters
 $('#character').select2();
 

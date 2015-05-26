@@ -1,6 +1,6 @@
 @extends('layouts.masterLayout')
 
-@section('html_title', 'ME / TE Calculation')
+@section('html_title', 'Research ME / TE')
 
 @section('page_content')
 
@@ -51,7 +51,7 @@
             <label for="laboratory">Laboratory</label>
           </div>
           <div class="col-md-11"> 
-            {!! \Form::select('laboratory', array('0'=>'Station', '1' => 'Research Laboratory (ME/TE)', '2' => 'Hyasoda Research Laboratory (ME/TE)', '3' => 'Design Laboratory (Copy)'), 'Station', array('autocomplete' => 'off', 'id'=>'laboratory', 'class'=>'form-control', 'value'=>'0')) !!}
+            {!! \Form::select('laboratory', array('0'=>'Station', '1' => 'Research Laboratory (ME/TE)', '2' => 'Hyasoda Research Laboratory (ME/TE)'), 'Station', array('autocomplete' => 'off', 'id'=>'laboratory', 'class'=>'form-control', 'value'=>'0')) !!}
           </div>
         </div>
         <div class="form-group row">

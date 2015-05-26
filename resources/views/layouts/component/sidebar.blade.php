@@ -59,12 +59,12 @@
               @endif
                     <a href="{{ URL::action('IndustryController@getManufacture') }}"><i class="fa fa-th-large"></i> <span>Manufacture</span></a>
                 </li>
-              @if(Request::url() === URL::action('IndustryController@getCalculation'))
+              @if(Request::url() === URL::action('IndustryController@getResearch'))
                 <li class="active">
               @else
                 <li>
               @endif
-                    <a href="{{ URL::action('IndustryController@getCalculation') }}"><i class="fa fa-th-large"></i> <span>ME / TE Calculation</span></a>
+                    <a href="{{ URL::action('IndustryController@getResearch') }}"><i class="fa fa-th-large"></i> <span>Research ME / TE</span></a>
                 </li>
             </ul>
         </li>
