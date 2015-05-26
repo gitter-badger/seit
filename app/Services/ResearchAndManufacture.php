@@ -47,28 +47,6 @@ class ResearchAndManufacture
     }
 
     /**
-     * List all manufacturable Types
-     *
-     * @return array Typemap of all things that one can produce
-     */
-    public static function listTypesManufacture()
-    {
-        $typeMap = null;
-        $query = \DB::Table('invTypes')
-            ->select('invTypes.typeID', 'invTypes.typeName')
-            ->join('industryActivity', 'invTypes.typeID', '=', 'industryActivity.typeID')
-            ->where('invTypes.published', 1)
-            ->where('industryActivity.activityID', 1)
-            ->orderBy('typeName', 'asc')
-            ->get();
-
-        foreach ($query as $e) {
-            $typeMap[(int)$e->typeID] = $e->typeName;
-        }
-        return $typeMap;
-    }
-
-    /**
      * Get Materials for a given BPC and activity
      *
      * @param $typeID int TypeID of BPC
@@ -172,16 +150,13 @@ class ResearchAndManufacture
             // Research Lab
             case 1:
                 return 0.7;
-                break;
             // Hyasoda Lab
             case 2:
                 return 0.65;
-                break;
             // Station
             case 0:
             default:
                 return 1;
-                break;
         }
     }
 
@@ -215,25 +190,18 @@ class ResearchAndManufacture
         switch ($activityID) {
             case ResearchAndManufacture::MANUFACTURE:
                 return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3380)) * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
-                break;
             case ResearchAndManufacture::RESEARCH_TE:
                 return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3403)) * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
-                break;
             case ResearchAndManufacture::RESEARCH_ME:
                 return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3409)) * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
-                break;
             case ResearchAndManufacture::COPY:
                 return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3402)) * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
-                break;
             case ResearchAndManufacture::REVERSE:
-                throw new Exception("NotImplemented: ResearchAndManufacture::REVERSE", 1);
-                break;
+                return 1;
             case ResearchAndManufacture::INVENTION:
                 return (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
-                break;
             case defult:
-                throw new Exception("activityID is not valid", 1);
-                break;
+                return 1;
         }
     }
 
