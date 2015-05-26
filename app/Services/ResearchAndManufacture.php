@@ -200,7 +200,7 @@ class ResearchAndManufacture
                 return 1;
             case ResearchAndManufacture::INVENTION:
                 return (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
-            case default:
+            default:
                 return 1;
         }
     }
