@@ -312,7 +312,7 @@ class ResearchAndManufacture
         }
 
         foreach (ResearchAndManufacture::getBPCMaterials($typeID, ResearchAndManufacture::MANUFACTURE) as $material => $quantity) {
-            $materials_required[$material] = 
+            $materials_required[$material] =
                 max(array($runs*ceil(round(($quantity*(1-($me/100)) * $assemblyModifier), 2))));
         }
 
