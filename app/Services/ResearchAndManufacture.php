@@ -286,7 +286,7 @@ class ResearchAndManufacture
             * $runs;
     }
 
-    public static function getMaterialsManufacture($typeID, $runs, $me, $characterID, $assemblyType)
+    public static function getMaterialsManufacture($typeID, $runs, $me, $assemblyType)
     {
         $materials_required = null;
         $assemblyModifier = 1;
