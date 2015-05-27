@@ -23,7 +23,8 @@ class Queue
                 array(
                     'jobID' => $jobID,
                     'status' => 'Queued',
-                    'command' => $command
+                    'command' => $command,
+                    'keyID' => -1 // internal ID for Crest jobs
                 )
             );
         } else {
