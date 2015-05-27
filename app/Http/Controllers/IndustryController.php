@@ -38,10 +38,8 @@ class IndustryController extends Controller
      */
     public function postManufacture()
     {
-        $errors = array();
-
-        $activityID = 1;
-        $payload    = null;
+        $errors     = array();
+        $payload    = array();
         $me         = \Input::get('me', '');
         $te         = \Input::get('te', '');
         $qty        = \Input::get('qty', '');
@@ -91,13 +89,10 @@ class IndustryController extends Controller
             $assembly
         );
 
-        //$jobSkills = \SeIT\Services\ResearchAndManufacture::getBPCSkills($type, $activityID);
-        
         $jobMaterials = \SeIT\Services\ResearchAndManufacture::getMaterialsManufacture(
             $type,
             $qty,
             $me,
-            $character,
             $assembly
         );
         
@@ -106,7 +101,6 @@ class IndustryController extends Controller
         $payload['jobMaterials'] = $jobMaterials;
         $payload['jobTime']      = \Carbon\Carbon::now()->addSeconds($jobTime)->diff(\Carbon\Carbon::now());
         $payload['jobFee']       = $jobFee;
-        //$payload['jobSkills']    = $jobSkills;
         
         return \View::make('ram.manufacture.result')->with('payload', $payload);
     }
