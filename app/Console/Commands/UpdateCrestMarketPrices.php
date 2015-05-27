@@ -37,8 +37,8 @@ class UpdateCrestMarketPrices extends Command
      */
     public function fire()
     {
-        \Log::info('Dispatching command ' . $this->name, array('src' => __CLASS__));
+        \Log::info('Dispatching command ' . $this->name);
         \SeIT\Services\Queue::addCrestJob('\SeIT\Queues\Crest\MarketPricesUpdater');
-        \Log::info('Dispatched command ' . $this->name, array('src' => __CLASS__));
+        \Log::info('Dispatched command ' . $this->name);
     }
 }

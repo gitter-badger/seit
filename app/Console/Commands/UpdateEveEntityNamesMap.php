@@ -39,9 +39,9 @@ class UpdateEveEntityNamesMap extends Command
     {
         // only push the trigger if there is something to resolve
         if (\SeIT\Models\SeITEntityNamesMap::where('resolved', '=', false)->count() > 0) {
-            \Log::info('Dispatching command ' . $this->name, array('src' => __CLASS__));
+            \Log::info('Dispatching command ' . $this->name);
             \SeIT\Services\Queue::addEveApiJob('\SeIT\Queues\EveApi\Services\ResolveEntityNames');
-            \Log::info('Dispatched command ' . $this->name, array('src' => __CLASS__));
+            \Log::info('Dispatched command ' . $this->name);
         }
     }
 }

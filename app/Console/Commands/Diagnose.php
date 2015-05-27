@@ -1,7 +1,6 @@
 <?php namespace SeIT\Console\Commands;
 
 use Illuminate\Console\Command;
-use SeIT\Queues\Crest\CrestBase;
 
 /**
  * Class Diagnose

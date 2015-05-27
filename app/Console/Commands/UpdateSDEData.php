@@ -52,15 +52,20 @@ class UpdateSDEData extends Command
      * @var string
      */
     protected $storage;
+
+    /**
+     * VVersion bucket for user defined version string
+     *
+     * @var string
+     */
+    protected $sdeversion;
     
 
     /**
      * Create a new command instance.
      */
-    public function __construct()
+    protected function bootstrap()
     {
-        parent::__construct();
-
         $this->client = new GuzzleClient();
 
         $r = $this->client->createRequest('GET', 'https://raw.githubusercontent.com/LunarchildEU/seit/resource/sde.json');
@@ -81,21 +86,28 @@ class UpdateSDEData extends Command
      */
     public function fire()
     {
-        if ($this->option('status') === true) {
-            $this->status();
+        $this->bootstrap();
+
+        if (!$this->option('sdeversion') === null)
+        {
+            $this->sdeversion = $this->option('sdeversion');
         }
 
-        if ($this->option('download') === true) {
-            $this->download();
+        if ($this->option('status') === true) {
+            $this->status();
         }
 
         if ($this->option('verify') === true) {
             $this->verify();
         }
 
-        if ($this->option('update') === true) {
-            $this->update();
+        if ($this->option('download') === true) {
+            $this->download();
         }
+
+        //if ($this->option('update') === true) {
+        //    $this->update();
+        //}
     }
 
     protected function download()
@@ -179,6 +191,8 @@ class UpdateSDEData extends Command
             }
             $sde_installed->value = $this->sdeMeta->version;
             $sde_installed->save();
+        } else {
+            exit();
         }
     }
 
@@ -201,13 +215,10 @@ class UpdateSDEData extends Command
     protected function verify()
     {
         $sde_installed = \SeIT\Models\SeITMetadata::where('key', '=', 'sde_version')->first();
-        $this->info('Installed SDE: ' . $sde_installed->value);
-        $this->info('Available SDE: ' . $this->sdeMeta->version);
-        $this->info('SDE Storage:   ' . $this->storage);
-
-        $i;
+        (int)$i = 0;
 
         foreach ($this->sdeMeta->tables as $table) {
+            $file = $this->storage . $table . $this->sdeMeta->format;
             if (!\File::exists($file)) {
                 $this->error('[missing] ' . $file);
             } else {
@@ -215,7 +226,7 @@ class UpdateSDEData extends Command
             }
         }
 
-        if (!count($sdeMeta->tables) == $i) {
+        if (!count($this->sdeMeta->tables) == $i) {
             return false;
         }
 
@@ -230,10 +241,11 @@ class UpdateSDEData extends Command
     protected function getOptions()
     {
         return [
-            ['status',   null, InputOption::VALUE_OPTIONAL, 'Check for Updates', true],
-            ['download', null, InputOption::VALUE_OPTIONAL, 'Download missing SDE data', true],
-            ['verify',   null, InputOption::VALUE_OPTIONAL, 'Verify that all SDE files are in place', true],
-            ['update',   null, InputOption::VALUE_OPTIONAL, 'Apply an update', true],
+            ['status',     null, InputOption::VALUE_OPTIONAL, 'Check for Updates', true],
+            ['download',   null, InputOption::VALUE_OPTIONAL, 'Download missing SDE data', true],
+            ['verify',     null, InputOption::VALUE_OPTIONAL, 'Verify that all SDE files are in place', true],
+            ['update',     null, InputOption::VALUE_OPTIONAL, 'Apply an update', true],
+            ['sdeversion', null, InputOption::VALUE_OPTIONAL, 'Override SDE Version', null],
         ];
     }
 }

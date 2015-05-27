@@ -37,7 +37,7 @@ class UpdateEveApiCharacter extends Command
      */
     public function fire()
     {
-        \Log::info('Dispatching command ' . $this->name, array('src' => __CLASS__));
+        \Log::info('Dispatching command ' . $this->name);
 
         $apiKeyList = \DB::Table('seit_keys')
             ->join('eve_account_apikeyinfo', 'eve_account_apikeyinfo.keyID', '=', 'seit_keys.keyID')
@@ -57,6 +57,6 @@ class UpdateEveApiCharacter extends Command
             );
         }
         
-        \Log::info('Dispatched command ' . $this->name, array('src' => __CLASS__));
+        \Log::info('Dispatched command ' . $this->name);
     }
 }

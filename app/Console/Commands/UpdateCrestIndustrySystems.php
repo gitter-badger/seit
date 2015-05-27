@@ -37,8 +37,8 @@ class UpdateCrestIndustrySystems extends Command
      */
     public function fire()
     {
-        \Log::info('Dispatching command ' . $this->name, array('src' => __CLASS__));
+        \Log::info('Dispatching command ' . $this->name);
         \SeIT\Services\Queue::addCrestJob('\SeIT\Queues\Crest\IndustrySystemsUpdater');
-        \Log::info('Dispatched command ' . $this->name, array('src' => __CLASS__));
+        \Log::info('Dispatched command ' . $this->name);
     }
 }

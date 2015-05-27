@@ -37,7 +37,7 @@ class UpdateEveApiAccount extends Command
      */
     public function fire()
     {
-        \Log::info('Dispatching command ' . $this->name, array('src' => __CLASS__));
+        \Log::info('Dispatching command ' . $this->name);
 
         $apiKeyList = \DB::Table('seit_keys')->where('isOk', true)->get();
 
@@ -53,6 +53,6 @@ class UpdateEveApiAccount extends Command
             );
         }
         
-        \Log::info('Dispatched command ' . $this->name, array('src' => __CLASS__));
+        \Log::info('Dispatched command ' . $this->name);
     }
 }
