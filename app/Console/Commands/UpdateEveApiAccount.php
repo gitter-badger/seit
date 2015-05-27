@@ -42,14 +42,12 @@ class UpdateEveApiAccount extends Command
         $apiKeyList = \DB::Table('seit_keys')->where('isOk', true)->get();
 
         foreach ($apiKeyList as $apiKey) {
-            \Log::info('Key Details: ', (array)$apiKey->keyID);
-
             \SeIT\Services\Queue::addEveApiJob(
                 '\SeIT\Queues\EveApi\Account\Worker',
                 $apiKey->keyID,
                 $apiKey->vCode,
                 'Account',
-                'AccountStatus'
+                ''
             );
         }
         

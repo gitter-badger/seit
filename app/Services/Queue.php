@@ -19,12 +19,13 @@ class Queue
 
         if (!$job) {
             $jobID = \Queue::push($command, array());
+
             QueueInformation::create(
                 array(
                     'jobID' => $jobID,
                     'status' => 'Queued',
                     'command' => $command,
-                    'keyID' => -1 // internal ID for Crest jobs
+                    'keyID' => -1, // internal ID for Crest jobs
                 )
             );
         } else {
@@ -61,15 +62,15 @@ class Queue
                 'vCode' => $vCode,
             ));
 
-            QueueInformation::insert(array(
-                'jobID' => $jobID,
-                'status' => 'Queued',
-                'command' => $command,
-                'keyID' => $keyID,
-                'vCode' => $vCode,
-                'api' => $api,
-                'scope' => $scope,
-            ));
+            $qi = new QueueInformation();
+            $qi->jobID = $jobID;
+            $qi->status = 'Queued';
+            $qi->command = $command;
+            $qi->keyID = $keyID;
+            $qi->vCode = $vCode;
+            $qi->api = $api;
+            $qi->scope = $scope;
+            $qi->save();
 
         } else {
             \Log::warning(
