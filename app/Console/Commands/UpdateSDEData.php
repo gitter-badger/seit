@@ -59,6 +59,8 @@ class UpdateSDEData extends Command
      * @var string
      */
     protected $sdeversion;
+
+    protected $verified = false;
     
 
     /**
@@ -98,16 +100,16 @@ class UpdateSDEData extends Command
         }
 
         if ($this->option('verify') === true) {
-            $this->verify();
+            $this->verified = $this->verify();
         }
 
-        if ($this->option('download') === true) {
+        if ($this->option('download') === true && $this->verified === false) {
             $this->download();
         }
 
-        //if ($this->option('update') === true) {
-        //    $this->update();
-        //}
+        if ($this->option('update') === true && $this->verified === false) {
+            $this->update();
+        }
     }
 
     protected function download()
@@ -120,20 +122,20 @@ class UpdateSDEData extends Command
                 // Check if we do not have the file and download as needed
                 if (!\File::exists($file)) {
                     $this->info('[info] Fetching ' . $table . ' from ' . $url);
-                    $request = $client->createRequest('GET', $url);
-                    $request->setHeader('User-Agent', $userAgent);
-                    $response = $client->send($request);
+                    $request = $this->client->createRequest('GET', $url);
+                    $request->setHeader('User-Agent', $this->userAgent);
+                    $response = $this->client->send($request);
                     \File::put($file, $response->getBody());
                     $this->info('[info] Saved ' . $table . ' to ' . $file);
                 } else {
-                    $request = $client->createRequest('HEAD', $url);
-                    $request->setHeader('User-Agent', $userAgent);
-                    $response = $client->send($request);
+                    $request = $this->client->createRequest('HEAD', $url);
+                    $request->setHeader('User-Agent', $this->userAgent);
+                    $response = $this->client->send($request);
                     if (!\File::size($file) == $response->getHeader('content-length')) {
                         $this->info('[info] Reaquiring ' . $table . ' from ' . $url);
-                        $request = $client->createRequest('GET', $url);
-                        $request->setHeader('User-Agent', $userAgent);
-                        $response = $client->send($request);
+                        $request = $this->client->createRequest('GET', $url);
+                        $request->setHeader('User-Agent', $this->userAgent);
+                        $response = $this->client->send($request);
                         \File::put($file, $response->getBody());
                         $this->info('[info] Saved ' . $table . ' to ' . $file);
                     }
@@ -183,40 +185,45 @@ class UpdateSDEData extends Command
                 \File::delete($file_sql);
             }
             
-            $sde_installed = \SeIT\Models\SeITMetadata::where('key', '=', 'sde_version')->first();
+            $sdeInstalled = \SeIT\Models\SeITMetadata::where('key', '=', 'sde_version')->first();
             
-            if (!$sde_installed) {
-                $sde_installed = new \SeIT\Models\SeITMetadata();
-                $sde_installed->key = 'sde_version';
+            if (!$sdeInstalled) {
+                $sdeInstalled = new \SeIT\Models\SeITMetadata();
+                $sdeInstalled->key = 'sde_version';
             }
-            $sde_installed->value = $this->sdeMeta->version;
-            $sde_installed->save();
-        } else {
-            exit();
+            $sdeInstalled->value = $this->sdeMeta->version;
+            $sdeInstalled->save();
         }
+    
+        return false;
     }
 
     protected function status()
     {
-        $sde_installed = \SeIT\Models\SeITMetadata::where('key', '=', 'sde_version')->first();
+        $sdeInstalled = \SeIT\Models\SeITMetadata::where('key', '=', 'sde_version')->first();
 
-        if (!$sde_installed) {
-            $sde_installed = new \SeIT\Models\SeITMetadata();
-            $sde_installed->key = 'sde_version';
-            $sde_installed->value = 'undefined';
-            $sde_installed->save();
+        if (!$sdeInstalled) {
+            $sdeInstalled = new \SeIT\Models\SeITMetadata();
+            $sdeInstalled->key = 'sde_version';
+            $sdeInstalled->value = 'undefined';
+            $sdeInstalled->save();
         }
 
-        $this->info('Installed SDE: ' . $sde_installed->value);
+        $this->info('Installed SDE: ' . $sdeInstalled->value);
         $this->info('Available SDE: ' . $this->sdeMeta->version);
         $this->info('SDE Storage:   ' . $this->storage);
     }
 
     protected function verify()
     {
-        $sde_installed = \SeIT\Models\SeITMetadata::where('key', '=', 'sde_version')->first();
-        (int)$i = 0;
+        $sdeInstalled = \SeIT\Models\SeITMetadata::where('key', '=', 'sde_version')->first();
+        // if not matching we need to update
+        if (!$sdeInstalled->value == $this->sdeMeta->version) {
+            return false;
+        }
 
+        (int)$i = 0;
+        // if missing file we need to reaquire it
         foreach ($this->sdeMeta->tables as $table) {
             $file = $this->storage . $table . $this->sdeMeta->format;
             if (!\File::exists($file)) {
