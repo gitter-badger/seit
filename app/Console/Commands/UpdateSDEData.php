@@ -70,7 +70,11 @@ class UpdateSDEData extends Command
     {
         $this->client = new GuzzleClient();
 
-        $r = $this->client->createRequest('GET', 'https://raw.githubusercontent.com/LunarchildEU/seit/resource/sde.json');
+        $r = $this->client->createRequest(
+            'GET',
+            'https://raw.githubusercontent.com/LunarchildEU/seit/resource/sde.json'
+        );
+        
         $r->setHeader('User-Agent', $this->userAgent);
 
         $this->sdeMeta = json_decode($this->client->send($r)->getBody());
@@ -90,8 +94,7 @@ class UpdateSDEData extends Command
     {
         $this->bootstrap();
 
-        if (!$this->option('sdeversion') === null)
-        {
+        if (!$this->option('sdeversion') === null) {
             $this->sdeversion = $this->option('sdeversion');
         }
 
@@ -146,7 +149,13 @@ class UpdateSDEData extends Command
 
     protected function update()
     {
-        if ($this->confirm('Unpack all downloaded files and import to "' . \Config::get('database.connections.seit.database') .'"? [YES/no]', true)) {
+        if ($this->confirm(
+            'Unpack all downloaded files and import to "' . \Config::get(
+                'database.connections.seit.database'
+            ) .'"? [YES/no]',
+            true
+        )
+        ) {
             foreach ($this->sdeMeta->tables as $table) {
                 $file = $this->storage . $table . $this->sdeMeta->format;
                 $file_sql = $this->storage . $table . '.sql';
@@ -177,7 +186,10 @@ class UpdateSDEData extends Command
                     exec($exec_command, $output, $exit_code);
 
                     if ($exit_code !== 0) {
-                        $this->error('[fail] ' . $table . ' import failed with exit code ' . $exit_code . ' and output "' . implode('\n', $output) . '"');
+                        $this->error(
+                            '[fail] ' . $table . ' import failed with exit code '
+                            . $exit_code . ' and output "' . implode('\n', $output) . '"'
+                        );
                     } else {
                         $this->info('[ok] ' . $table);
                     }

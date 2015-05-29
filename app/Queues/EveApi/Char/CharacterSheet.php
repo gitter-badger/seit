@@ -67,7 +67,12 @@ class CharacterSheet
             // Check if the data in the database is still considered up to date.
             // checkDbCache will return true if this is the case
             if (!EveApi::checkDbCache($scope, $api, $character_sheet->cached_until, $characterID)) {
-                $character_data = \SeIT\Models\EveCharacterCharacterSheet::where('characterID', '=', $characterID)->first();
+                $character_data = \SeIT\Models\EveCharacterCharacterSheet::where(
+                    'characterID',
+                    '=',
+                    $characterID
+                )
+                ->first();
                 
                 if (!$character_data) {
                     $character_data = new \SeIT\Models\EveCharacterCharacterSheet;
@@ -104,12 +109,18 @@ class CharacterSheet
                 $character_data->save();
                 // Update the characters skills
                 foreach ($character_sheet->skills as $skill) {
-                    $skill_data = \SeIT\Models\EveCharacterCharacterSheetSkills::where('characterID', '=', $characterID)
-                        ->where('typeID', '=', $skill->typeID)
-                        ->first();
+                    $skill_data = \SeIT\Models\EveCharacterCharacterSheetSkills::where(
+                        'characterID',
+                        '=',
+                        $characterID
+                    )
+                    ->where('typeID', '=', $skill->typeID)
+                    ->first();
+                    
                     if (!$skill_data) {
                         $skill_data = new \SeIT\Models\EveCharacterCharacterSheetSkills;
                     }
+                    
                     $skill_data->characterID = $characterID;
                     $skill_data->typeID = $skill->typeID;
                     $skill_data->skillpoints = $skill->skillpoints;
