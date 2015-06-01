@@ -41,6 +41,7 @@ class ResearchAndManufacture
     protected static function getBaseJobTime($typeID, $activityID)
     {
         return \DB::Table('industryActivity')
+            ->select('time')
             ->where('typeID', '=', $typeID)
             ->where('activityID', $activityID)
             ->pluck('time');
@@ -163,7 +164,7 @@ class ResearchAndManufacture
     public static function getLevelModifier($start, $stop, $activityID)
     {
         // at TE Research the Levels are a multiple of 2
-        if ($activityID == ResearchAndManufacture::RESEARCH_TE) {
+        if ($activityID == self::RESEARCH_TE) {
             $start = $start / 2;
             $stop = $stop / 2;
         }
@@ -188,21 +189,17 @@ class ResearchAndManufacture
     public static function getSkillModifier($characterID, $activityID)
     {
         switch ($activityID) {
-            case ResearchAndManufacture::MANUFACTURE:
-                return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3380))
-                    * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
-            case ResearchAndManufacture::RESEARCH_TE:
-                return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3403))
-                    * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
-            case ResearchAndManufacture::RESEARCH_ME:
-                return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3409))
-                    * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
-            case ResearchAndManufacture::COPY:
-                return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3402))
-                    * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
-            case ResearchAndManufacture::REVERSE:
+            case self::MANUFACTURE:
+                return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3380)) * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
+            case self::RESEARCH_TE:
+                return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3403)) * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
+            case self::RESEARCH_ME:
+                return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3409)) * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
+            case self::COPY:
+                return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3402)) * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
+            case self::REVERSE:
                 return 1;
-            case ResearchAndManufacture::INVENTION:
+            case self::INVENTION:
                 return (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
             default:
                 return 1;
@@ -212,22 +209,22 @@ class ResearchAndManufacture
     private static function getSystemCostIndex($system, $activityID)
     {
         switch ($activityID) {
-            case ResearchAndManufacture::MANUFACTURE:
+            case self::MANUFACTURE:
                 $index_column ="manufacturingIndex";
                 break;
-            case ResearchAndManufacture::RESEARCH_TE:
+            case self::RESEARCH_TE:
                 $index_column = "teResearchIndex";
                 break;
-            case ResearchAndManufacture::RESEARCH_ME:
+            case self::RESEARCH_ME:
                 $index_column = "meResearchIndex";
                 break;
-            case ResearchAndManufacture::COPY:
+            case self::COPY:
                 $index_column ="copyIndex";
                 break;
-            case ResearchAndManufacture::REVERSE:
+            case self::REVERSE:
                 $index_column ="reverseIndex";
                 break;
-            case ResearchAndManufacture::INVENTION:
+            case self::INVENTION:
                 $index_column ="inventionIndex";
                 break;
         }
@@ -237,27 +234,27 @@ class ResearchAndManufacture
 
     public static function getJobFeeResearch($typeID, $activityID, $system, $characterID, $start, $end)
     {
-        return ResearchAndManufacture::getBaseJobCost($typeID)
-            * ResearchAndManufacture::getSystemCostIndex($system, $activityID)
+        return self::getBaseJobCost($typeID)
+            * self::getSystemCostIndex($system, $activityID)
             * 0.02
-            * ResearchAndManufacture::getLevelModifier($start, $end, $activityID)
+            * self::getLevelModifier($start, $end, $activityID)
             / 105;
     }
 
     public static function getJobFeeManufacture($typeID, $system, $runs)
     {
-        return ResearchAndManufacture::getBaseJobCost($typeID)
-            * ResearchAndManufacture::getSystemCostIndex($system, ResearchAndManufacture::MANUFACTURE)
+        return self::getBaseJobCost($typeID)
+            * self::getSystemCostIndex($system, self::MANUFACTURE)
             * $runs;
 
     }
 
     public static function getJobTimeResearch($typeID, $activityID, $system, $characterID, $start, $end, $labType)
     {
-        return ResearchAndManufacture::getBaseJobTime($typeID, $activityID)
-            * ResearchAndManufacture::getLevelModifier($start, $end, $activityID)
-            * ResearchAndManufacture::getResearchLabModifier($labType)
-            * ResearchAndManufacture::getSkillModifier($characterID, $activityID)
+        return self::getBaseJobTime($typeID, $activityID)
+            * self::getLevelModifier($start, $end, $activityID)
+            * self::getResearchLabModifier($labType)
+            * self::getSkillModifier($characterID, $activityID)
             / 105;
     }
 
@@ -283,10 +280,10 @@ class ResearchAndManufacture
                 break;
         }
         
-        return ResearchAndManufacture::getBaseTime($typeID, ResearchAndManufacture::MANUFACTURE)
+        return self::getBaseTime($typeID, self::MANUFACTURE)
             * (1.0 - $te / 100)
             * $assemblyModifier
-            * ResearchAndManufacture::getSkillModifier($characterID, ResearchAndManufacture::MANUFACTURE)
+            * self::getSkillModifier($characterID, self::MANUFACTURE)
             * $runs;
     }
 
@@ -315,10 +312,7 @@ class ResearchAndManufacture
                 break;
         }
 
-        foreach (ResearchAndManufacture::getBPCMaterials(
-            $typeID,
-            ResearchAndManufacture::MANUFACTURE
-        ) as $material => $quantity) {
+        foreach (self::getBPCMaterials($typeID, self::MANUFACTURE) as $material => $quantity) {
             $materials_required[$material] =
                 max(array($runs*ceil(round(($quantity*(1-($me/100)) * $assemblyModifier), 2))));
         }
