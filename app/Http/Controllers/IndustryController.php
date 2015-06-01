@@ -245,10 +245,30 @@ class IndustryController extends Controller
     public function getBlueprints()
     {
         $payload['blueprints'] = \DB::Table('eve_character_blueprints')
-            ->select('invTypes.typeName', 'invGroups.groupName', 'eve_character_blueprints.*', 'eve_character_sheet.*')
-            ->join('invTypes', 'invTypes.typeID', '=', 'eve_character_blueprints.typeID')
-            ->join('eve_character_sheet', 'eve_character_sheet.characterID', '=', 'eve_character_blueprints.characterID')
-            ->join('invGroups', 'invGroups.groupID', '=', 'invTypes.groupID')
+            ->select(
+                'invTypes.typeName',
+                'invGroups.groupName',
+                'eve_character_blueprints.*',
+                'eve_character_sheet.*'
+            )
+            ->join(
+                'invTypes',
+                'invTypes.typeID',
+                '=',
+                'eve_character_blueprints.typeID'
+            )
+            ->join(
+                'eve_character_sheet',
+                'eve_character_sheet.characterID',
+                '=',
+                'eve_character_blueprints.characterID'
+            )
+            ->join(
+                'invGroups',
+                'invGroups.groupID',
+                '=',
+                'invTypes.groupID'
+            )
             ->orderBy('invTypes.typeName', 'asc')
             ->get();
 

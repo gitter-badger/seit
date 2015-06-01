@@ -13,7 +13,8 @@ class SSOController extends Controller
 
     public function __construct()
     {
-        $this->userAgent = 'SeIT/SSO-Bridge v.' . \Config::get('seit.version') . ' (Contact '.\Config::get('seit.owner').')';
+        $this->userAgent =
+            'SeIT/SSO-Bridge v.' . \Config::get('seit.version') . ' (Contact '.\Config::get('seit.owner').')';
     }
 
     /**
@@ -39,7 +40,12 @@ class SSOController extends Controller
             $client = new GuzzleClient();
             $request = $client->createRequest('POST', $tokenUrl);
             $request->setHeader('User-Agent', $this->userAgent);
-            $request->addHeader('Authorization', 'Basic ' . base64_encode(\Config::get('seit.sso_clientid') .':'. \Config::get('seit.sso_secret')));
+            $request->addHeader(
+                'Authorization',
+                'Basic ' . base64_encode(
+                    \Config::get('seit.sso_clientid') .':'. \Config::get('seit.sso_secret')
+                )
+            );
             
             $requestBody = $request->getBody();
             $requestBody->setField('grant_type', 'authorization_code');

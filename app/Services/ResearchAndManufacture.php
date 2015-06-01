@@ -189,13 +189,17 @@ class ResearchAndManufacture
     {
         switch ($activityID) {
             case ResearchAndManufacture::MANUFACTURE:
-                return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3380)) * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
+                return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3380))
+                    * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
             case ResearchAndManufacture::RESEARCH_TE:
-                return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3403)) * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
+                return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3403))
+                    * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
             case ResearchAndManufacture::RESEARCH_ME:
-                return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3409)) * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
+                return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3409))
+                    * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
             case ResearchAndManufacture::COPY:
-                return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3402)) * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
+                return (1.0 - 0.05 * DB::getSkillLevel($characterID, 3402))
+                    * (1.0 - 0.03 * DB::getSkillLevel($characterID, 3388));
             case ResearchAndManufacture::REVERSE:
                 return 1;
             case ResearchAndManufacture::INVENTION:
@@ -311,7 +315,10 @@ class ResearchAndManufacture
                 break;
         }
 
-        foreach (ResearchAndManufacture::getBPCMaterials($typeID, ResearchAndManufacture::MANUFACTURE) as $material => $quantity) {
+        foreach (ResearchAndManufacture::getBPCMaterials(
+            $typeID,
+            ResearchAndManufacture::MANUFACTURE
+        ) as $material => $quantity) {
             $materials_required[$material] =
                 max(array($runs*ceil(round(($quantity*(1-($me/100)) * $assemblyModifier), 2))));
         }

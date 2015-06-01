@@ -56,7 +56,12 @@ class ResolveEntityNames
                     $names = $pheal->eveScope->CharacterName(array('ids' => implode(',', $resolvable)));
 
                     foreach ($names->characters as $lookup_result) {
-                        $record = \SeIT\Models\SeITEntityNamesMap::where('entityID', $lookup_result->characterID)->first();
+                        $record = \SeIT\Models\SeITEntityNamesMap::where(
+                            'entityID',
+                            $lookup_result->characterID
+                        )
+                        ->first();
+                        
                         $record->resolved = true;
                         $record->entityName = $lookup_result->name;
                         $record->save();

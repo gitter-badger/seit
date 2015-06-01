@@ -42,11 +42,16 @@ class BaseApi
     public static function bootstrap()
     {
         $psrlog = new \Monolog\Logger('phealng');
-        $psrlog->pushHandler(new \Monolog\Handler\StreamHandler(storage_path() . '/logs/phealng.log', \Monolog\Logger::DEBUG));
+        $psrlog->pushHandler(
+            new \Monolog\Handler\StreamHandler(storage_path() . '/logs/phealng.log', \Monolog\Logger::DEBUG)
+        );
+        
         PhealConfig::getInstance()->cache = new \Pheal\Cache\FileStorage(storage_path(). '/cache/phealcache/');
         PhealConfig::getInstance()->access = new \Pheal\Access\StaticCheck();
         PhealConfig::getInstance()->log = new \Pheal\Log\PsrLogger($psrlog);
-        PhealConfig::getInstance()->http_user_agent = 'SeIT ' . \Config::get('seit.version') . ' API Fetcher for ' . \Config::get('seit.owner');
+        PhealConfig::getInstance()->http_user_agent =
+            'SeIT ' . \Config::get('seit.version') . ' API Fetcher for ' . \Config::get('seit.owner');
+        
         PhealConfig::getInstance()->api_customkeys = true;
         PhealConfig::getInstance()->http_method = 'curl';
 

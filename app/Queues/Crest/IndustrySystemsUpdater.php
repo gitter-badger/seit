@@ -49,7 +49,8 @@ class IndustrySystemsUpdater extends CrestBase
                 \Log::info(__CLASS__ . ': Updating data for ' . count($crest_response_body->items) . ' items');
 
                 foreach ($crest_response_body->items as $item) {
-                    $record = \SeIT\Models\CrestIndustrySystems::where('solarSystemID', $item->solarSystem->id)->first();
+                    $record =
+                        \SeIT\Models\CrestIndustrySystems::where('solarSystemID', $item->solarSystem->id)->first();
 
                     if (!$record) {
                         $record = new \SeIT\Models\CrestIndustrySystems;
