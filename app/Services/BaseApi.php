@@ -131,7 +131,7 @@ class BaseApi
             $accessMask = \SeIT\Models\EveAccountAPIKeyInfo::where('keyID', '=', $owner)->pluck('accessMask');
         }
         // Generate a hash with which to ID this call
-        $hash = BaseApi::makeCallHash($api, $scope, $owner . $accessMask);
+        $hash = self::makeCallHash($api, $scope, $owner . $accessMask);
         // Check the cache if a ban has been recorded
         if (!\Cache::has('call_ban_grace_count_' . $hash)) {
             // Record the new ban, getting the grance period from the seit config and return
@@ -184,7 +184,7 @@ class BaseApi
         if ($accessMask == 0) {
             $accessMask = \SeIT\Models\EveAccountAPIKeyInfo::where('keyID', '=', $owner)->pluck('accessMask');
         }
-        $hash = BaseApi::makeCallHash($api, $scope, $owner . $accessMask);
+        $hash = self::makeCallHash($api, $scope, $owner . $accessMask);
         $banned = \SeIT\Models\BannedCall::where('hash', '=', $hash)->first();
         if ($banned) {
             return true;
@@ -203,7 +203,7 @@ class BaseApi
     public static function checkDbCache($api, $scope, $cachedUntil, $owner = 0)
     {
         // Generate the hash based on the func args
-        $hash = BaseApi::makeCallHash($api, $scope, $owner);
+        $hash = self::makeCallHash($api, $scope, $owner);
         $current_cache_time = \SeIT\Models\CachedUntil::where('hash', '=', $hash)->first();
         // Check if we have a cache timer set.
         if ($current_cache_time) {
@@ -229,7 +229,7 @@ class BaseApi
     public static function setDbCache($api, $scope, $cachedUntil, $owner = 0)
     {
         // Generate the hash based on the func args
-        $hash = BaseApi::makeCallHash($api, $scope, $owner);
+        $hash = self::makeCallHash($api, $scope, $owner);
         $current_cache_time = \SeIT\Models\CachedUntil::where('hash', '=', $hash)->first();
         if ($current_cache_time) {
             $current_cache_time->cached_until = $cachedUntil;
@@ -254,7 +254,7 @@ class BaseApi
     public static function lockCall($api, $scope, $owner = 0)
     {
         // Generate the hash based on the func args
-        $hash = BaseApi::makeCallHash($api, $scope, $owner);
+        $hash = self::makeCallHash($api, $scope, $owner);
         \Cache::put('api_lock_' . $hash, '_locked_', Carbon::now()->addMinutes(60));
         return $hash;
     }
@@ -268,7 +268,7 @@ class BaseApi
     public static function isLockedCall($api, $scope, $owner = 0)
     {
         // Generate the hash based on the func args
-        $hash = BaseApi::makeCallHash($api, $scope, $owner);
+        $hash = self::makeCallHash($api, $scope, $owner);
         if (\Cache::has('api_lock_' . $hash)) {
             return true;
         } else {
