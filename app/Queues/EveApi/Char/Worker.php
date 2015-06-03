@@ -34,11 +34,13 @@ class Worker
             return false;
         }
         try {
+            
             // Worker Code starts here
-
             CharacterSheet::update($job_record->keyID, $job_record->vCode);
 
             Blueprints::update($job_record->keyID, $job_record->vCode);
+
+            IndustryJobs::update($job_record->keyID, $job_record->vCode);
 
             // If worker is successful
             $job_record->status = 'Done';
