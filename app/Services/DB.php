@@ -138,4 +138,15 @@ class DB
             ->orderBy('invMarketGroups.marketGroupName', 'asc')
             ->get();
     }
+
+    public static function getCharacterIDsByUserID($userID)
+    {
+        return \DB::Table('eve_account_apikeyinfo_characters')
+            ->select('eve_account_apikeyinfo_characters.characterID')
+            ->join('seit_keys', 'seit_keys.keyID', '=', 'eve_account_apikeyinfo_characters.keyID')
+            ->where('seit_keys.user_id', '=', $userID)
+            ->groupBy('eve_account_apikeyinfo_characters.characterID')
+            ->orderBy('eve_account_apikeyinfo_characters.characterID', 'asc')
+            ->lists('characterID');
+    }
 }

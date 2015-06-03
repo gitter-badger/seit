@@ -34,7 +34,6 @@ class Worker
             return false;
         }
         try {
-            
             // Worker Code starts here
             CharacterSheet::update($job_record->keyID, $job_record->vCode);
 

@@ -245,34 +245,24 @@ class IndustryController extends Controller
     public function getBlueprints()
     {
         $payload['blueprints'] = \DB::Table('eve_character_blueprints')
-            ->select(
-                'invTypes.typeName',
-                'invGroups.groupName',
-                'eve_character_blueprints.*',
-                'eve_character_sheet.*'
-            )
-            ->join(
-                'invTypes',
-                'invTypes.typeID',
-                '=',
-                'eve_character_blueprints.typeID'
-            )
-            ->join(
-                'eve_character_sheet',
-                'eve_character_sheet.characterID',
-                '=',
-                'eve_character_blueprints.characterID'
-            )
-            ->join(
-                'invGroups',
-                'invGroups.groupID',
-                '=',
-                'invTypes.groupID'
-            )
+            ->join('invTypes', 'invTypes.typeID', '=', 'eve_character_blueprints.typeID')
+            ->join('eve_character_sheet', 'eve_character_sheet.characterID', '=', 'eve_character_blueprints.characterID')
+            ->join('invGroups', 'invGroups.groupID', '=', 'invTypes.groupID')
+            ->whereIn('eve_character_blueprints.characterID', \SeIT\Services\DB::getCharacterIDsByUserID(\Auth::user()->id))
             ->orderBy('invTypes.typeName', 'asc')
             ->get();
 
         return \View::make('ram.blueprints.view')
+            ->with('payload', $payload);
+    }
+
+    public function getJobs()
+    {
+        $payload['jobs'] = \DB::Table('eve_character_industryjobs')
+            ->whereIn('eve_character_industryjobs.installerID', \SeIT\Services\DB::getCharacterIDsByUserID(\Auth::user()->id))
+            ->get();
+
+        return \View::make('debug')
             ->with('payload', $payload);
     }
 }
