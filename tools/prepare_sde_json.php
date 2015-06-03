@@ -1,14 +1,68 @@
+#!/usr/bin/env php
 <?php
-
 // Prepare the data that we want represented as JSON
 $d = [
-   'version' => 'mosaic-1.2-112318',
-   'url' => 'https://www.fuzzwork.co.uk/dump/mosaic-1.2-112318/',
-   'format' => '.sql.bz2',
-   'tables' => [
-   ]
+    'version' => 'sdecarnyx-1.0-113321',
+    'url' => 'https://www.fuzzwork.co.uk/dump/sdecarnyx-1.0-113321/',
+    'format' => '.sql.bz2',
+    'tables' => [
+        "dgmAttributeCategories",
+        "dgmAttributeTypes",
+        "dgmEffects",
+        "dgmExpressions",
+        "dgmTypeAttributes",
+        "dgmTypeEffects",
+        "eveIcons",
+        "eveUnits",
+        "industryActivity",
+        "industryActivityMaterials",
+        "industryActivityProbabilities",
+        "industryActivityProducts",
+        "industryActivitySkills",
+        "industryBlueprints",
+        "invCategories",
+        "invContrabandTypes",
+        "invControlTowerResourcePurposes",
+        "invControlTowerResources",
+        "invFlags",
+        "invGroups",
+        "invItems",
+        "invMarketGroups",
+        "invMetaGroups",
+        "invMetaTypes",
+        "invNames",
+        "invPositions",
+        "invTraits",
+        "invTypeMaterials",
+        "invTypeReactions",
+        "invTypes",
+        "invUniqueNames",
+        "invVolumes",
+        "mapCelestialStatistics",
+        "mapConstellationJumps",
+        "mapConstellations",
+        "mapDenormalize",
+        "mapJumps",
+        "mapLandmarks",
+        "mapLocationScenes",
+        "mapLocationWormholeClasses",
+        "mapRegionJumps",
+        "mapRegions",
+        "mapSolarSystemJumps",
+        "mapSolarSystems",
+        "mapUniverse",
+        "ramActivities",
+        "ramAssemblyLineStations",
+        "ramAssemblyLineTypeDetailPerCategory",
+        "ramAssemblyLineTypeDetailPerGroup",
+        "ramAssemblyLineTypes",
+        "ramInstallationTypeContents",
+        "staOperations",
+        "staOperationServices",
+        "staServices",
+        "staStations",
+        "staStationTypes"
+    ]
 ];
-
 // Print the resultant JSON
 print_r(json_encode($d) . PHP_EOL);
-
