@@ -43,6 +43,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('task:update-crest-industry-facilities')->cron('51 */1 * * * *');
         $schedule->command('task:update-crest-industry-systems')->cron('52 */1 * * * *');
         $schedule->command('task:update-eve-entity-names-map')->cron('*/5 * * * * *');
-        $schedule->command('task:database-maintenance')->cron('*/5 * * * * *');
+        $schedule->command('task:update-eve-entity-names-map')->cron('*/5 * * * * *');
+        $schedule->command('task:update-eve-account')->cron('41 */1 * * * *');
+        $schedule->command('task:update-eve-character')->cron('42 */1 * * * *');
     }
 }
