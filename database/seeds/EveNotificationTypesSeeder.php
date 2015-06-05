@@ -1,4 +1,4 @@
-<?php
+<?php namespace SeIT\Database\Seeds;
 
 use Illuminate\Database\Seeder;
 

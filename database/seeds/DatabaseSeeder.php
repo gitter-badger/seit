@@ -15,10 +15,10 @@ class DatabaseSeeder extends Seeder
     {
         Model::unguard();
 
-        $this->call('EveCorporationRolemapSeeder');
-        $this->call('EveNotificationTypesSeeder');
-        $this->call('EveErrorlistSeeder');
-        $this->call('EveReftypesSeeder');
-        $this->call('EveApiCalllistSeeder');
+        $this->call('\SeIT\Database\Seeds\EveCorporationRolemapSeeder');
+        $this->call('\SeIT\Database\Seeds\EveNotificationTypesSeeder');
+        $this->call('\SeIT\Database\Seeds\EveErrorlistSeeder');
+        $this->call('\SeIT\Database\Seeds\EveReftypesSeeder');
+        $this->call('\SeIT\Database\Seeds\EveApiCalllistSeeder');
     }
 }
