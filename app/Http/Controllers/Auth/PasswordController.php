@@ -1,9 +1,9 @@
 <?php namespace SeIT\Http\Controllers\Auth;
 
-use SeIT\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Foundation\Auth\ResetsPasswords;
+use SeIT\Http\Controllers\Controller;
 
 /**
  * Class PasswordController

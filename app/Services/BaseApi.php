@@ -24,8 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-use Pheal\Core\Config as PhealConfig;
 use Carbon\Carbon;
+use Pheal\Core\Config as PhealConfig;
 
 /**
  * Class BaseApi
