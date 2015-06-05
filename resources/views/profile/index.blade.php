@@ -44,38 +44,42 @@
         <h3 class="box-title">Keys</h3>
       </div><!-- ./box-header -->
       <div class="box-body">
-        <table class="table table-condensed">
-          <thead>
-            <tr>
-              <th>keyID</th>
-              <th>Type</th>
-              <th>Mask</th>
-              <th>Expires</th>
-              <th>Characters</th>
-            </tr>
-          </thead>
-          <tbody>
-            @foreach($keys as $key)
-            <tr>       
-              <td>{!! $key->keyID !!}</td>
-              <td>{!! $key->type !!}</td>
-              <td>{!! $key->accessMask !!}</td>
-              <td>
-                  @if($key->expires == null)
-                    Never
-                  @else
-                    {!! Carbon\Carbon::parse($key->expires) !!}
-                  @endif
-              </td>
-              <td>
-                  @foreach(SeIT\Services\BaseApi::findKeyCharactersFull($key->keyID) as $character)
-                    <img src="//image.eveonline.com/Character/{!! $character['characterID'] !!}_32.jpg" class="img-circle" data-toggle="tooltip" title="{!! $character['characterName'] !!}"/>
-                  @endforeach
-              </td>
-            </tr>
-            @endforeach
-          </tbody>
-        </table>
+        @if(count($keys))
+          <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th>keyID</th>
+                <th>Type</th>
+                <th>Mask</th>
+                <th>Expires</th>
+                <th>Characters</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($keys as $key)
+              <tr>
+                <td>{!! $key->keyID !!}</td>
+                <td>{!! $key->type !!}</td>
+                <td>{!! $key->accessMask !!}</td>
+                <td>
+                    @if($key->expires == null)
+                      Never
+                    @else
+                      {!! Carbon\Carbon::parse($key->expires) !!}
+                    @endif
+                </td>
+                <td>
+                    @foreach(SeIT\Services\BaseApi::findKeyCharactersFull($key->keyID) as $character)
+                      <img src="{{ SeIT\Services\Helper::getImageByID($character['characterID'], 32) }}" class="img-circle" data-toggle="tooltip" title="{{ $character['characterName'] }}"/>
+                    @endforeach
+                </td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
+        @else
+          <p>No Keys found.</p>
+        @endif
       </div><!-- ./box-body -->
       <!--<div class="box-footer">
       </div>-->
@@ -87,26 +91,30 @@
         <h3 class="box-title">SSO Links</h3>
       </div><!-- ./box-header -->
       <div class="box-body">
-        <table class="table table-condensed">
-          <thead>
-            <tr>
-              <th>Character</th>
-              <th>Type</th>
-              <th>*</th>
-              <th>*</th>
-              <th>*</th>
-            </tr>
-          </thead>
-          <tbody>
-            @foreach($ssolinks as $ssolink)
-            <tr>
-              <td>{{ $ssolink->characterName }} <img src="//image.eveonline.com/Character/{!! $ssolink->characterID !!}_32.jpg" class="img-circle" data-toggle="tooltip" title="{!! $ssolink->characterName !!}"/></td>
-              <td>{{ $ssolink->tokenType }}</td>
-              <td>{{ $ssolink->scopes }}</td>
-            </tr>
-            @endforeach
-          </tbody>
-        </table>
+        @if(count($ssolinks))
+          <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th>Character</th>
+                <th>Type</th>
+                <th>*</th>
+                <th>*</th>
+                <th>*</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($ssolinks as $ssolink)
+              <tr>
+                <td>{{ $ssolink->characterName }} <img src="//image.eveonline.com/Character/{!! $ssolink->characterID !!}_32.jpg" class="img-circle" data-toggle="tooltip" title="{!! $ssolink->characterName !!}"/></td>
+                <td>{{ $ssolink->tokenType }}</td>
+                <td>{{ $ssolink->scopes }}</td>
+              </tr>
+              @endforeach
+            </tbody>
+          </table>
+        @else
+          <p>No SSO links found.</p>
+        @endif
       </div><!-- ./box-body -->
       <!--<div class="box-footer">
       </div>-->
