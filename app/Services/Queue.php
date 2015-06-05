@@ -9,7 +9,7 @@ use SeIT\Models\QueueInformation;
 class Queue
 {
     /**
-     * @param $command
+     * @param string $command
      */
     public static function addCrestJob($command)
     {
@@ -40,7 +40,7 @@ class Queue
     }
 
     /**
-     * @param $command
+     * @param string $command
      * @param int $keyID
      * @param string $vCode
      * @param string $api

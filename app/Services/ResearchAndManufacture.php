@@ -51,7 +51,7 @@ class ResearchAndManufacture
      * Get Materials for a given BPC and activity
      *
      * @param $typeID int TypeID of BPC
-     * @param $activityID int Kind of Job (Manufacture, Research, etc.)
+     * @param integer $activityID int Kind of Job (Manufacture, Research, etc.)
      * @return array
      */
     public static function getBPCMaterials($typeID, $activityID)
@@ -91,7 +91,7 @@ class ResearchAndManufacture
      * Get the Time needed for a given BPC and activity
      *
      * @param $typeID int TypeID of BPC
-     * @param $activityID int Kind of Job (Manufacture, Research, etc.)
+     * @param integer $activityID int Kind of Job (Manufacture, Research, etc.)
      * @return object
      */
     private static function getBaseTime($typeID, $activityID)
