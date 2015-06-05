@@ -14,7 +14,7 @@ class CrestBase
     * Get the content of the CREST root document
     *
     * @param $live boolean flag to choose from either Tranquility or Singularity
-    * @return mixed
+    * @return \GuzzleHttp\Message\ResponseInterface
     */
     public static function getCrestRoot($live = true)
     {
@@ -38,7 +38,7 @@ class CrestBase
     *
     *   @param $url string URL from CREST to get
     *
-    *   @return mixed Result of GET Request to Url
+    *   @return \GuzzleHttp\Message\ResponseInterface Result of GET Request to Url
     */
     public static function getCrestUrl($url)
     {

@@ -101,7 +101,7 @@ class VerifyCsrfToken
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Illuminate\Http\RedirectResponse  $response
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     protected function addCookieToRedirectResponse(Request $request, RedirectResponse $response)
     {
@@ -117,7 +117,7 @@ class VerifyCsrfToken
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Illuminate\Http\JsonResponse  $response
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     protected function addCookieToJSONResponse(Request $request, JsonResponse $response)
     {

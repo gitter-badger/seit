@@ -88,7 +88,7 @@ class BaseApi
      * @param string $api api that gets called
      * @param string $scope scope of the call
      * @param string $owner owner of the call (keyID or characterID)
-     * @return array
+     * @return string
      */
     public static function makeCallHash($api, $scope, $owner)
     {
@@ -114,11 +114,11 @@ class BaseApi
     }
 
     /**
-     * @param $api
-     * @param $scope
+     * @param string $api
+     * @param string $scope
      * @param int $owner
      * @param int $accessMask
-     * @param null $reason
+     * @param string $reason
      */
     public static function banCall($api, $scope, $owner = 0, $accessMask = 0, $reason = null)
     {
@@ -172,8 +172,8 @@ class BaseApi
     }
 
     /**
-     * @param $api
-     * @param $scope
+     * @param string $api
+     * @param string $scope
      * @param int $owner
      * @param int $accessMask
      * @return bool
@@ -194,8 +194,8 @@ class BaseApi
     }
 
     /**
-     * @param $api
-     * @param $scope
+     * @param string $api
+     * @param string $scope
      * @param $cachedUntil
      * @param int $owner
      * @return bool
@@ -221,8 +221,8 @@ class BaseApi
     }
 
     /**
-     * @param $api
-     * @param $scope
+     * @param string $api
+     * @param string $scope
      * @param $cachedUntil
      * @param int $owner
      */
@@ -246,10 +246,10 @@ class BaseApi
     }
 
     /**
-     * @param $api
-     * @param $scope
+     * @param string $api
+     * @param string $scope
      * @param int $owner
-     * @return array
+     * @return string
      */
     public static function lockCall($api, $scope, $owner = 0)
     {
@@ -260,8 +260,8 @@ class BaseApi
     }
 
     /**
-     * @param $api
-     * @param $scope
+     * @param string $api
+     * @param string $scope
      * @param int $owner
      * @return bool
      */
@@ -277,7 +277,7 @@ class BaseApi
     }
 
     /**
-     * @param $hash
+     * @param string $hash
      */
     public static function unlockCall($hash)
     {
