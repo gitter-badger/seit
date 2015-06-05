@@ -6,14 +6,12 @@
 class Helper
 {
     /*
-    * Strips the Namespace of a Classname
-    * 
-    * @param $classname string Classname with full Namespace
-    * @return string Classname without Namespace
-    * @access public
-    * @static
-    */
-    /**
+     * Strips the Namespace of a Classname
+     * 
+     * @param $classname string Classname with full Namespace
+     * @return string Classname without Namespace
+     * @access public
+     * @static
      * @param $classname
      * @return mixed
      */
@@ -80,5 +78,22 @@ class Helper
         $format = trim(implode(" ", $format));
 
         return $di->format($format);
+    }
+
+    public static function getImageByID($id, $size)
+    {
+        $baseUrl = '//image.eveonline.com/';
+
+        if ($id > 90000000 && $id < 98000000) {
+            return $baseUrl.'Character/'.$id.'_'.$size.'.jpg';
+        } elseif (($id > 98000000 && $id < 99000000) || ($id > 1000000 && $id < 2000000)) {
+            return $baseUrl.'Corporation/'.$id.'_'.$size.'.png';
+        } elseif (($id > 99000000 && $id < 100000000) || ($id > 500000 && $id < 1000000)) {
+            return $baseUrl.'Alliance/'.$id.'_'.$size.'.png';
+        } elseif (($id > 0 && $id < 500000)) {
+            return $baseUrl.'Type/'.$id.'_'.$size.'.png';
+        }
+        // return path to "Type not found" icon if not matching
+        return $baseUrl . 'Type/1_'.$size.'.png';
     }
 }
