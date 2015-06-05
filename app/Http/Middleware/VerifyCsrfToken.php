@@ -1,15 +1,15 @@
 <?php namespace SeIT\Http\Middleware;
 
 use Closure;
-use Symfony\Component\HttpFoundation\Cookie;
 use Illuminate\Contracts\Encryption\Encrypter;
-use Illuminate\Session\TokenMismatchException;
-use Symfony\Component\Security\Core\Util\StringUtils;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Session\TokenMismatchException;
 use RuntimeException;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\Security\Core\Util\StringUtils;
 
 /**
  * Class VerifyCsrfToken
