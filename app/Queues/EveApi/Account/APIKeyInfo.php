@@ -21,7 +21,6 @@ class APIKeyInfo
      */
     public static function update($keyID, $vCode)
     {
-        \Log::info('APIKeyInfo loaded');
 
         EveApi::bootstrap();
         EveApi::validateKeyPair($keyID, $vCode);
@@ -57,11 +56,6 @@ class APIKeyInfo
             $apiKey->type = $phealResult->key->type;
             $apiKey->expires = (strlen($phealResult->key->expires) > 0 ? $phealResult->key->expires : null);
             $apiKey->save();
-
-            // Corporation keys show no Character data
-            if ($apiKey->type == 'corporation') {
-                return true;
-            }
 
             // pre-seed missingCharacters with the known Characters
             $missingCharacters = \SeIT\Models\EveAccountAPIKeyInfoCharacters::where('keyID', '=', $keyID)

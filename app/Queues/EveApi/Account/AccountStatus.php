@@ -32,6 +32,13 @@ class AccountStatus
             return false;
         }
 
+        $apiKey = \SeIT\Models\EveAccountAPIKeyInfo::where('keyID', '=', $keyID)->first();
+
+        // Corporation keys show no Character data
+        if ($apiKey->type == 'Corporation') {
+            return true;
+        }
+
         $pheal = new  Pheal($keyID, $vCode);
 
         try {
