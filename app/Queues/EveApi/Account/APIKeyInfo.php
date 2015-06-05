@@ -46,17 +46,22 @@ class APIKeyInfo
         }
 
         if (!EveApi::checkDbCache($scope, $api, $phealResult->cached_until, $keyID)) {
-            $dbRecord = \SeIT\Models\EveAccountAPIKeyInfo::where('keyID', '=', $keyID)->first();
+            $apiKey = \SeIT\Models\EveAccountAPIKeyInfo::where('keyID', '=', $keyID)->first();
 
-            if (!$dbRecord) {
-                $dbRecord = new \SeIT\Models\EveAccountAPIKeyInfo;
+            if (!$apiKey) {
+                $apiKey = new \SeIT\Models\EveAccountAPIKeyInfo;
             }
 
-            $dbRecord->keyID = $keyID;
-            $dbRecord->accessMask = $phealResult->key->accessMask;
-            $dbRecord->type = $phealResult->key->type;
-            $dbRecord->expires = (strlen($phealResult->key->expires) > 0 ? $phealResult->key->expires : null);
-            $dbRecord->save();
+            $apiKey->keyID = $keyID;
+            $apiKey->accessMask = $phealResult->key->accessMask;
+            $apiKey->type = $phealResult->key->type;
+            $apiKey->expires = (strlen($phealResult->key->expires) > 0 ? $phealResult->key->expires : null);
+            $apiKey->save();
+
+            // Corporation keys show no Character data
+            if ($apiKey->type == 'corporation') {
+                return true;
+            }
 
             // pre-seed missingCharacters with the known Characters
             $missingCharacters = \SeIT\Models\EveAccountAPIKeyInfoCharacters::where('keyID', '=', $keyID)
