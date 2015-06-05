@@ -25,7 +25,7 @@ class IndustryFacilitiesUpdater extends CrestBase
             return false;
         }
 
-        if (!parent::checkAttempts($job, $job_record)) {
+        if (!self::checkAttempts($job, $job_record)) {
             return false;
         }
 
