@@ -62,6 +62,8 @@ class APIKeyInfo
                 ->select('characterID')
                 ->lists('characterID');
 
+            $missingCharacters = array_flip($missingCharacters);
+
             foreach ($phealResult->key->characters as $character) {
                 // Check if we need to update || insert
                 $character_data = \SeIT\Models\EveAccountAPIKeyInfoCharacters::where('keyID', '=', $keyID)
@@ -72,7 +74,7 @@ class APIKeyInfo
                 if (!$character_data) {
                     $character_data = new \SeIT\Models\EveAccountAPIKeyInfoCharacters;
                 }
-                
+
                 $character_data->keyID = $keyID;
                 $character_data->characterID = $character->characterID;
                 $character_data->characterName = $character->characterName;
@@ -85,6 +87,8 @@ class APIKeyInfo
                     unset($missingCharacters[$character->characterID]);
                 }
             }
+
+            $missingCharacters = array_flip($missingCharacters);
 
             \DB::Table('eve_account_apikeyinfo_characters')
                 ->whereIn('characterID', $missingCharacters)
