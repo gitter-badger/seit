@@ -69,9 +69,13 @@
                     @endif
                 </td>
                 <td>
-                    @foreach(SeIT\Services\BaseApi::findKeyCharactersFull($key->keyID) as $character)
-                      <img src="{{ SeIT\Services\Helper::getImageByID($character['characterID'], 32) }}" class="img-circle" data-toggle="tooltip" title="{{ $character['characterName'] }}"/>
-                    @endforeach
+                    @if(SeIT\Services\BaseApi::findKeyCharactersFull($key->keyID))
+                      @foreach(SeIT\Services\BaseApi::findKeyCharactersFull($key->keyID) as $character)
+                        <img src="{{ SeIT\Services\Helper::getImageByID($character['characterID'], 32) }}" class="img-circle" data-toggle="tooltip" title="{{ $character['characterName'] }}"/>
+                      @endforeach
+                    @else
+                      <p>None</p>
+                    @endif
                 </td>
               </tr>
               @endforeach
