@@ -52,6 +52,13 @@
               @endif
                     <a href="{{ URL::action('IndustryController@getInvention') }}"><i class="fa fa-th-large"></i> <span>Invention Chance</span></a>
                 </li>
+              @if(Request::url() === URL::action('IndustryController@getJobs'))
+                <li class="active">
+              @else
+                <li>
+              @endif
+                    <a href="{{ URL::action('IndustryController@getJobs') }}"><i class="fa fa-th-large"></i> <span>Jobs</span></a>
+                </li>
               @if(Request::url() === URL::action('IndustryController@getManufacture'))
                 <li class="active">
               @else

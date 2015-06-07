@@ -259,10 +259,25 @@ class IndustryController extends Controller
     public function getJobs()
     {
         $payload['jobs'] = \DB::Table('eve_character_industryjobs')
+            ->select(
+                'seit_dev.eve_character_industryjobs.*',
+                'ramActivities.activityName as activityName',
+                'station.stationName as stationName',
+                'blueprintLocation.stationName as blueprintLocationName',
+                'outputLocation.stationName as outputLocationName',
+                'facility.stationName as facilityName'
+            )
+            ->join('ramActivities', 'ramActivities.activityID', '=', 'eve_character_industryjobs.activityID')
+            ->join('staStations as station', 'station.stationID', '=', 'eve_character_industryjobs.stationID')
+            ->join('staStations as blueprintLocation', 'blueprintLocation.stationID', '=', 'eve_character_industryjobs.blueprintLocationID')
+            ->join('staStations as outputLocation', 'outputLocation.stationID', '=', 'eve_character_industryjobs.outputLocationID')
+            ->join('staStations as facility', 'facility.stationID', '=', 'eve_character_industryjobs.facilityID')
+            ->where('eve_character_industryjobs.deleted_at', '=', null)
             ->whereIn('eve_character_industryjobs.installerID', \SeIT\Services\DB::getCharacterIDsByUserID(\Auth::user()->id))
+            ->orderBy('endDate', 'asc')
             ->get();
 
-        return \View::make('debug')
+        return \View::make('ram.jobs.view')
             ->with('payload', $payload);
     }
 }
