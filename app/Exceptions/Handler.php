@@ -41,7 +41,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if (config('app.debug')) {
+        if (config('app.debug') && ($exception instanceof \Symfony\Component\HttpKernel\Exception\HttpException)) {
             $whoops = new \Whoops\Run;
 
             if ($request->ajax()) {
