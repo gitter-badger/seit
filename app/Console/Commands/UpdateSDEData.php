@@ -53,12 +53,16 @@ class UpdateSDEData extends Command
     protected $storage;
 
     /**
-     * VVersion bucket for user defined version string
+     * Version bucket for user defined version string
      *
      * @var string
      */
     protected $sdeversion;
 
+    /*
+     * Flag that wil be set from verify()
+     * @var bool
+     */
     protected $verified = false;
     
 
@@ -93,7 +97,7 @@ class UpdateSDEData extends Command
     {
         $this->bootstrap();
 
-        if (!$this->option('sdeversion') === null) {
+        if (!$this->option('sdeversion') === null && is_string($this->option('sdeversion'))) {
             $this->sdeversion = $this->option('sdeversion');
         }
 
