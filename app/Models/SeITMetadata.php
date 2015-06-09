@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class SeITKeys
  * @package SeIT\Models
+ * @property int key
+ * @property string value
  */
 class SeITMetadata extends Model
 {
