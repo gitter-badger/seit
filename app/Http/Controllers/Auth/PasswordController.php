@@ -23,6 +23,11 @@ class PasswordController extends Controller
 	|
 	*/
 
+    /*
+     * @property string redirectPath
+     */
+    protected $redirectPath = '';
+
     use ResetsPasswords;
 
     /**
