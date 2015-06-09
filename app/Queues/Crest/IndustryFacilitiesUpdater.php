@@ -34,10 +34,10 @@ class IndustryFacilitiesUpdater extends CrestBase
             $job_record->output = 'Starting Industry->Facilities Update';
             $job_record->save();
 
-            $url = parent::getCrestRoot(\Config::get('seit.crest_uselive'))
+            $url = self::getCrestRoot(\Config::get('seit.crest_uselive'))
                 ->json(['object'=>true])->industry->facilities->href;
             
-            $crest_response = parent::getCrestUrl($url);
+            $crest_response = self::getCrestUrl($url);
             \DB::beginTransaction();
             
             if ($crest_response->getStatusCode() == 200) {
@@ -97,7 +97,7 @@ class IndustryFacilitiesUpdater extends CrestBase
 
         } catch (\Exception $e) {
             \DB::rollback();
-            parent::ExceptionHandler($e, $job, $job_record);
+            self::ExceptionHandler($e, $job, $job_record);
             return false;
         }
     }
