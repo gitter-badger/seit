@@ -17,6 +17,7 @@ class EveApiCalllistSeeder extends Seeder
         $pheal = new  Pheal();
 
         $callList = $pheal->apiScope->CallList();
+        $calls = array();
 
         foreach ($callList->calls as $call) {
             $calls[] = array(

@@ -15,9 +15,10 @@ class EveReftypesSeeder extends Seeder
         $pheal = new  Pheal();
 
         $typeList = $pheal->eveScope->RefTypes();
+        $refTypes = array();
 
         foreach ($typeList->refTypes as $type) {
-            $errors[] = array(
+            $refTypes[] = array(
                 'refTypeID' => $type->refTypeID,
                 'refTypeName' => $type->refTypeName,
                 'created_at' => \Carbon\Carbon::now(),
@@ -26,7 +27,7 @@ class EveReftypesSeeder extends Seeder
         }
 
         \DB::table('eve_reftypes')->insert(
-            $errors
+            $refTypes
         );
     }
 }

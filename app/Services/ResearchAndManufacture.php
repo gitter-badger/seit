@@ -208,6 +208,8 @@ class ResearchAndManufacture
 
     private static function getSystemCostIndex($system, $activityID)
     {
+        $index_column = '';
+
         switch ($activityID) {
             case self::MANUFACTURE:
                 $index_column ="manufacturingIndex";
@@ -260,8 +262,6 @@ class ResearchAndManufacture
 
     public static function getJobTimeManufacture($typeID, $runs, $te, $characterID, $assemblyType)
     {
-        $assemblyModifier = 1;
-
         switch($assemblyType) {
             // Rapid Assembly
             case 3:
@@ -290,7 +290,6 @@ class ResearchAndManufacture
     public static function getMaterialsManufacture($typeID, $runs, $me, $assemblyType)
     {
         $materials_required = null;
-        $assemblyModifier = 1;
 
         switch($assemblyType) {
             // Rapid Assembly

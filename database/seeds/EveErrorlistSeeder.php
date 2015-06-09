@@ -15,6 +15,7 @@ class EveErrorlistSeeder extends Seeder
         $pheal = new  Pheal();
 
         $errorList = $pheal->eveScope->ErrorList();
+        $errors = array();
 
         foreach ($errorList->errors as $error) {
             $errors[] = array(
