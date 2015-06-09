@@ -164,7 +164,7 @@ class UpdateSDEData extends Command
                 $file_sql = $this->storage . $table . '.sql';
                 
                 if (!\File::exists($file)) {
-                    $this->warn($file . ' is missing.');
+                    $this->error($file . ' is missing.');
                     continue;
                 }
                 
