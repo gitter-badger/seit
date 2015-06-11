@@ -29,6 +29,7 @@ class AjaxController extends Controller
             ->where('solarSystemName', 'like', '%'.\Input::get('q').'%')
             ->orderBy('solarSystemName', 'asc')
             ->get();
+
         return \Response::json($systemMap);
     }
 
@@ -66,6 +67,7 @@ class AjaxController extends Controller
             ->where('industryActivity.activityID', 1)
             ->orderBy('typeName', 'asc')
             ->get();
+
         return \Response::json($typeMap);
     }
 
@@ -92,6 +94,12 @@ class AjaxController extends Controller
      */
     public function getQueueInformation()
     {
+        if (!\Request::ajax()) {
+            \App::abort(404);
+        }
+
+        $payload = array();
+
         $payload['count_error'] = \DB::Table('queue_information')
             ->where('status', 'Error')
             ->count();
@@ -113,7 +121,6 @@ class AjaxController extends Controller
 
     public function getMarketgroupTree()
     {
-        $payload = \SeIT\Services\DB::iterateMarketGroupData();
-        return \Response::json($payload);
+        return \Response::json(\SeIT\Services\DB::iterateMarketGroupData());
     }
 }

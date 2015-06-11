@@ -136,6 +136,7 @@ class IndustryController extends Controller
      */
     public function postResearch()
     {
+        $payload = array();
         $errors = array();
         $type = \Input::get('type', '');
         $system = \Input::get('system', '');
@@ -244,6 +245,8 @@ class IndustryController extends Controller
      */
     public function getBlueprints()
     {
+        $payload = array();
+
         $payload['blueprints'] = \DB::Table('eve_character_blueprints')
             ->join('invTypes', 'invTypes.typeID', '=', 'eve_character_blueprints.typeID')
             ->join('eve_character_sheet', 'eve_character_sheet.characterID', '=', 'eve_character_blueprints.characterID')
@@ -258,6 +261,8 @@ class IndustryController extends Controller
 
     public function getJobs()
     {
+        $payload = array();
+
         $payload['jobs'] = \DB::Table('eve_character_industryjobs')
             ->select(
                 'seit_dev.eve_character_industryjobs.*',

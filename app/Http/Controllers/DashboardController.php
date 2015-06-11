@@ -20,6 +20,8 @@ class DashboardController extends Controller
      */
     public function getIndex()
     {
+        $payload = array();
+
         $payload['count_error'] = \DB::Table('queue_information')
             ->where('status', 'Error')
             ->count();
